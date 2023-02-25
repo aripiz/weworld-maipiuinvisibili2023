@@ -8,7 +8,7 @@ import pandas as pd
 
 app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP]) #
 
-path = Path("/Users/ariele/Library/CloudStorage/GoogleDrive-ariele.piziali@gmail.com/Il mio Drive/Lavoro/WeWorld/Italiano/2023/Notebooks/app/")
+path = Path("/Users/ariele/Library/CloudStorage/GoogleDrive-ariele.piziali@gmail.com/Il mio Drive/Lavoro/WeWorld/Italiano/2023/weworld-maipiuinvisibili2023/app")
 
 app.layout = html.Div([
     html.H4("WeWorld Mai più invisibili 2023: evoluzione dell'indice"),
@@ -32,7 +32,7 @@ def display_choropleth(subindex):
 
     fig = px.choropleth(df, geojson=geogejson_territori, locations='codice_istat',
                     featureidkey="properties.istat_code_num", projection='natural earth', animation_frame='anno',
-                    title="WeWorld <i>Mai più invisibili 2023</i>: evoluzione dell'indice",
+                    #title="WeWorld <i>Mai più invisibili 2023</i>: evoluzione dell'indice",
                     color=subindex,
                     range_color=[20,80],
                     color_continuous_scale='RdYlGn',
@@ -41,8 +41,8 @@ def display_choropleth(subindex):
                                 'Totale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
                     ) 
     fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    fig.update_layout(margin={"r":1,"t":1,"l":1,"b":1})
     return fig
 
 
-app.run_server(debug=True)
+app.run_server(debug=False)
