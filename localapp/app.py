@@ -74,7 +74,7 @@ def render_tab_content(active_tab, data):
                 dcc.Dropdown(
                     id='subindex',
                     options=options_list,
-                    value=options_list[-1],
+                    value=options_list[0],
                     style={"width": "40%"}
                 ),
                 dcc.Graph(
