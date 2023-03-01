@@ -1,6 +1,6 @@
-territorio,anno,Contesto,Bambini,Donne,Generale
-Italia,2018,65.1,53.0,49.0,55.3
-Italia,2019,68.6,53.9,49.6,56.8
-Italia,2020,70.8,50.8,49.8,56.4
-Italia,2021,70.8,48.2,51.0,55.8
-Italia,2022,70.8,48.2,50.4,55.6
+territorio,anno,Generale,Contesto,Bambini,Donne
+Italia,2018,55.3,65.1,53.0,49.0
+Italia,2019,56.8,68.6,53.9,49.6
+Italia,2020,56.4,70.8,50.8,49.8
+Italia,2021,55.8,70.8,48.2,51.0
+Italia,2022,55.6,70.8,48.2,50.4

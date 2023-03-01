@@ -2,7 +2,7 @@
 # Dash webapp to present WeWorld "Mai più invisibili 2023" index and indicators
 # available at http://aripiz.pythonanywhere.com/
 
-from dash import Dash, dcc, html, Input, Output
+from dash import Dash, dcc, html, Input, Output, dash_table
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
 
@@ -36,7 +36,7 @@ index_data = pd.read_csv(index_data_file)
 indicators_data = pd.read_csv(indicators_data_file)
 dimensions_data = pd.read_csv(dimensions_data_file)
 indicators_meta = pd.read_csv(indicators_meta_file, index_col=0)
-geo_data = pd.read_json(geo_data_file,lines=True).to_dict('records')[0]
+#geo_data = pd.read_json(geo_data_file,lines=True).to_dict('records')[0]
 
 
 app.layout = dbc.Container([
@@ -50,6 +50,8 @@ app.layout = dbc.Container([
                 dbc.Tab(label="Mappa dimensioni", tab_id="dimensions"),
                 dbc.Tab(label="Mappa indicatori", tab_id="indicators"),
                 dbc.Tab(label="Correlazione dimensioni", tab_id="correlations"),
+                dbc.Tab(label="Classifica", tab_id="ranking"),
+                dbc.Tab(label="Evoluzione temporale", tab_id="evolution"),
             ],
             id="tabs",
             active_tab="index",
@@ -64,11 +66,6 @@ app.layout = dbc.Container([
     Output("tab-content", "children"),
     [Input("tabs", "active_tab"), Input("store", "data")])
 def render_tab_content(active_tab, data):
-    """
-    This callback takes the 'active_tab' property as input, as well as the
-    stored graphs, and renders the tab content depending on what the value of
-    'active_tab' is.
-    """
     if active_tab is not None:
         if active_tab == "index":
             options_list = index_data.columns[2:-2]
@@ -141,13 +138,35 @@ def render_tab_content(active_tab, data):
                     #responsive=True
                 )
             ])
+        elif active_tab == 'ranking':
+            options_list = dimensions_data.columns[2:-2]
+            years_list = index_data['anno'].unique() 
+            return html.Div([
+                dbc.Row([
+                dbc.Col([
+                html.P("Seleziona un sottoindice o una dimensione:"),
+                dcc.Dropdown(
+                    id="feature",
+                    options = options_list,
+                    value=options_list[0],
+                    style={"width": "75%"}
+                )]),
+                dbc.Col([
+                html.P("Seleziona un anno:"),
+                dcc.Dropdown(
+                    id='year',
+                    options = years_list ,
+                    value = years_list[-1],
+                    style={"width": "75%"}
+                )])]),
+            ])
     return "Nessun elemento selezionato."
 
 @app.callback(
     Output("index_map", "figure"),
     Input("subindex", "value"))
 def display_map_index(subindex):
-    fig = px.choropleth(index_data, geojson=geo_data,
+    fig = px.choropleth(index_data, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
         color=subindex,
@@ -177,7 +196,7 @@ def display_map_indicators(indicator):
     else:
         color_scale = 'RdYlGn'
         limits_scale = [indicators_meta.loc[int(indicator)]['worst_value'], indicators_meta.loc[int(indicator)]['best_value']]
-    fig = px.choropleth(indicators_data, geojson=geo_data,
+    fig = px.choropleth(indicators_data, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
         color=indicator,
@@ -200,7 +219,7 @@ def display_map_indicators(indicator):
     Output("dimensions_map", "figure"),
     Input("dimension", "value"))
 def display_map_dimensions(dimension):
-    fig = px.choropleth(dimensions_data, geojson=geo_data,
+    fig = px.choropleth(dimensions_data, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
         color=dimension,
@@ -234,6 +253,14 @@ def display_corr_dimensions(dimension_x, dimension_y):
     )
     fig["layout"].pop("updatemenus")
     return fig
+'''
+@app.callback(
+    Output("ranking_table", "figure"),
+    Input("feature", "value"))
+def display_ranking(feature):
+
+    return "In preparazione"
+'''
 
 if __name__ == "__main__":
     app.run(debug=True)
