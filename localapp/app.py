@@ -101,9 +101,9 @@ def render_tab_content(active_tab, data):
                 )
             ])
         elif active_tab == "correlations":
-            options_list = dimensions_data.columns[2:-2]
+            options_list = df_data.columns[4:23]
             return html.Div([
-                html.P("Seleziona due dimensioni da confrontare:"),
+                html.P("Seleziona due Indici/Dimensioni da confrontare:"),
                 dbc.Row([
                 dbc.Col(dcc.Dropdown(
                     id="dimension_x",
@@ -126,7 +126,7 @@ def render_tab_content(active_tab, data):
         elif active_tab == "dimensions":
             options_list = df_data.columns[7:23]
             return html.Div([
-                html.P("Seleziona una dimensione:"),
+                html.P("Seleziona una Dimensione:"),
                 dcc.Dropdown(
                     id='dimension',
                     options = options_list ,
