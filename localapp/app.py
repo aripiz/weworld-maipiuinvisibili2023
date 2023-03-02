@@ -2,6 +2,9 @@
 # Dash webapp to present WeWorld "Mai più invisibili 2023" index and indicators
 # available at http://aripiz.pythonanywhere.com/
 
+
+#### Preamble ####
+# Libraries
 from dash import Dash, dcc, html, Input, Output, dash_table
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
@@ -21,24 +24,27 @@ dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.mi
 load_figure_template(figure_template)
 pio.templates.default = figure_template
 
-
-app = Dash(__name__, external_stylesheets=[theme, dbc_css], suppress_callback_exceptions=True, title=title)
-
+#### External data ####
 # Files link
+data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/dati_territori.csv"
 index_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/sottoindici_territori.csv"
 indicators_meta_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/metadati_indicatori_territori.csv"
 indicators_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/indicatori_dati_territori.csv"
 dimensions_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/dimensioni_territori.csv"
 geo_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/italy_regions_low.json"
 
-# Data loading
+# Loading
+data = pd.read_csv(data_file)
 index_data = pd.read_csv(index_data_file)
 indicators_data = pd.read_csv(indicators_data_file)
 dimensions_data = pd.read_csv(dimensions_data_file)
 indicators_meta = pd.read_csv(indicators_meta_file, index_col=0)
 #geo_data = pd.read_json(geo_data_file,lines=True).to_dict('records')[0]
 
+#### App ####
+app = Dash(__name__, external_stylesheets=[theme, dbc_css], suppress_callback_exceptions=True, title=title)
 
+# Main layout
 app.layout = dbc.Container([
         dcc.Store(id="store"),
         dcc.Markdown("# WeWorld _Mai più invisibili 2023_"),
@@ -62,6 +68,7 @@ app.layout = dbc.Container([
     className="dbc"
 )
 
+# Tabs
 @app.callback(
     Output("tab-content", "children"),
     [Input("tabs", "active_tab"), Input("store", "data")])
@@ -146,7 +153,7 @@ def render_tab_content(active_tab, data):
                 dbc.Col([
                 html.P("Seleziona un sottoindice o una dimensione:"),
                 dcc.Dropdown(
-                    id="feature",
+                    id="ranking_feature",
                     options = options_list,
                     value=options_list[0],
                     style={"width": "75%"}
@@ -154,14 +161,37 @@ def render_tab_content(active_tab, data):
                 dbc.Col([
                 html.P("Seleziona un anno:"),
                 dcc.Dropdown(
-                    id='year',
+                    id='ranking_ year',
                     options = years_list ,
                     value = years_list[-1],
                     style={"width": "75%"}
                 )])]),
             ])
+        elif active_tab == 'evolution':
+            territories_list = data['territorio'].unique()
+            options_list = data.columns[2:19]
+            return html.Div([
+                dbc.Row([
+                dbc.Col([
+                html.P("Seleziona un sottoindice o una dimensione:"),
+                dcc.Dropdown(
+                    id="evolution_feature",
+                    options = options_list,
+                    value=options_list[0],
+                    style={"width": "75%"}
+                )]),
+                dbc.Col([
+                html.P("Seleziona un anno:"),
+                dcc.Dropdown(
+                    id='evolution_territory',
+                    options = territories_list ,
+                    value = 'Italia',
+                    style={"width": "75%"}
+                )])]),
+            ])
     return "Nessun elemento selezionato."
 
+# Index map
 @app.callback(
     Output("index_map", "figure"),
     Input("subindex", "value"))
@@ -185,6 +215,7 @@ def display_map_index(subindex):
     fig["layout"].pop("updatemenus")
     return fig
 
+# Indicators map
 @app.callback(
     Output("indicators_map", "figure"),
     Input("indicator", "value"))
@@ -215,6 +246,7 @@ def display_map_indicators(indicator):
     fig["layout"].pop("updatemenus")
     return fig
 
+# Dimension map
 @app.callback(
     Output("dimensions_map", "figure"),
     Input("dimension", "value"))
@@ -238,6 +270,7 @@ def display_map_dimensions(dimension):
     fig["layout"].pop("updatemenus")
     return fig
 
+# Correlation
 @app.callback(
     Output("dimensions_correlation", "figure"),
     Input('dimension_x', 'value'),
@@ -253,14 +286,23 @@ def display_corr_dimensions(dimension_x, dimension_y):
     )
     fig["layout"].pop("updatemenus")
     return fig
-'''
+
+# Ranking
 @app.callback(
     Output("ranking_table", "figure"),
-    Input("feature", "value"))
-def display_ranking(feature):
-
+    Input("ranking_feature", "value"),
+    Input("ranking_year", "value"))
+def display_ranking(feature, year):
     return "In preparazione"
-'''
 
+# Evolution
+@app.callback(
+    Output("evolution", "figure"),
+    Input("evolution_feature", "value"),
+    Input("evolution_territory", "value"))
+def display_evolution(feature, territory):
+    return "In preparazione"
+
+#### Degug ####
 if __name__ == "__main__":
     app.run(debug=True)
