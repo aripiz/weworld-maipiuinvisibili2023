@@ -26,19 +26,13 @@ pio.templates.default = figure_template
 
 #### External data ####
 # Files link
-data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/dati_territori.csv"
-index_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/sottoindici_territori.csv"
-indicators_meta_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/metadati_indicatori_territori.csv"
-indicators_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/indicatori_dati_territori.csv"
-dimensions_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/dimensioni_territori.csv"
+data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/maipiuinvisibili2023_data.csv"
+indicators_meta_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/maipiuinvisibili2023_metadata.csv"
 geo_data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/italy_regions_low.json"
 
 # Loading
-data = pd.read_csv(data_file)
-index_data = pd.read_csv(index_data_file)
-indicators_data = pd.read_csv(indicators_data_file)
-dimensions_data = pd.read_csv(dimensions_data_file)
-indicators_meta = pd.read_csv(indicators_meta_file, index_col=0)
+df_data = pd.read_csv(data_file)
+df_meta = pd.read_csv(indicators_meta_file, index_col=0)
 #geo_data = pd.read_json(geo_data_file,lines=True).to_dict('records')[0]
 
 #### App ####
@@ -75,9 +69,9 @@ app.layout = dbc.Container([
 def render_tab_content(active_tab, data):
     if active_tab is not None:
         if active_tab == "index":
-            options_list = index_data.columns[2:-2]
+            options_list = df_data.columns[4:7]
             return html.Div([
-                html.P("Seleziona un indice:"),
+                html.P("Seleziona un Indice:"),
                 dcc.Dropdown(
                     id='subindex',
                     options=options_list,
@@ -91,7 +85,7 @@ def render_tab_content(active_tab, data):
             ])
         elif active_tab == "indicators":
             #return "Sezione ancora da creare."
-            options_list = [f"{num}: {indicators_meta.loc[num]['nome']}" for num in indicators_meta.index]
+            options_list = [f"{num}: {df_meta.loc[num]['nome']}" for num in df_meta.index]
             return html.Div([
                 html.P("Seleziona un indicatore:"),
                 dcc.Dropdown(
@@ -130,7 +124,7 @@ def render_tab_content(active_tab, data):
                 ),
             ])
         elif active_tab == "dimensions":
-            options_list = dimensions_data.columns[2:-2]
+            options_list = df_data.columns[7:23]
             return html.Div([
                 html.P("Seleziona una dimensione:"),
                 dcc.Dropdown(
@@ -146,8 +140,8 @@ def render_tab_content(active_tab, data):
                 )
             ])
         elif active_tab == 'ranking':
-            options_list = dimensions_data.columns[2:-2]
-            years_list = index_data['anno'].unique() 
+            options_list = options_list = df_data.columns[4:23]
+            years_list = df_data['anno'].unique() 
             return html.Div([
                 dbc.Row([
                 dbc.Col([
@@ -168,8 +162,8 @@ def render_tab_content(active_tab, data):
                 )])]),
             ])
         elif active_tab == 'evolution':
-            territories_list = data['territorio'].unique()
-            options_list = data.columns[2:19]
+            territories_list = df_data['territorio'].unique()
+            options_list = df_data.columns[4:23]
             return html.Div([
                 dbc.Row([
                 dbc.Col([
@@ -178,16 +172,23 @@ def render_tab_content(active_tab, data):
                     id="evolution_feature",
                     options = options_list,
                     value=options_list[0],
-                    style={"width": "75%"}
+                    style={"width": "75%"},
+                    multi=True
                 )]),
                 dbc.Col([
-                html.P("Seleziona un anno:"),
+                html.P("Seleziona un territorio:"),
                 dcc.Dropdown(
                     id='evolution_territory',
                     options = territories_list ,
                     value = 'Italia',
-                    style={"width": "75%"}
-                )])]),
+                    style={"width": "75%"},
+                    multi=True
+                )])]),       
+                dcc.Graph(
+                    id="evolution",
+                    style={'width': '90vw', 'height': '70vh'}
+                    #responsive=True
+                )
             ])
     return "Nessun elemento selezionato."
 
@@ -196,7 +197,7 @@ def render_tab_content(active_tab, data):
     Output("index_map", "figure"),
     Input("subindex", "value"))
 def display_map_index(subindex):
-    fig = px.choropleth(index_data, geojson=geo_data_file,
+    fig = px.choropleth(df_data, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
         color=subindex,
@@ -221,13 +222,13 @@ def display_map_index(subindex):
     Input("indicator", "value"))
 def display_map_indicators(indicator):
     indicator = indicator.split(":")[0]
-    if indicators_meta.loc[int(indicator)]['inverted']=='yes':
+    if df_meta.loc[int(indicator)]['inverted']=='yes':
         color_scale = 'RdYlGn_r'
-        limits_scale = [indicators_meta.loc[int(indicator)]['best_value'], indicators_meta.loc[int(indicator)]['worst_value']]
+        limits_scale = [df_meta.loc[int(indicator)]['best_value'], df_meta.loc[int(indicator)]['worst_value']]
     else:
         color_scale = 'RdYlGn'
-        limits_scale = [indicators_meta.loc[int(indicator)]['worst_value'], indicators_meta.loc[int(indicator)]['best_value']]
-    fig = px.choropleth(indicators_data, geojson=geo_data_file,
+        limits_scale = [df_meta.loc[int(indicator)]['worst_value'], df_meta.loc[int(indicator)]['best_value']]
+    fig = px.choropleth(df_data, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
         color=indicator,
@@ -240,7 +241,7 @@ def display_map_indicators(indicator):
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(
         margin={"r":0,"t":30,"l":0,"b":0},
-        coloraxis_colorbar=dict(title=indicators_meta.loc[int(indicator)]['unità']),
+        coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità']),
         sliders = [dict(len=0.25, active= 4, x=0.5,xanchor='center', currentvalue= {"prefix": "Anno: "})]
     )
     fig["layout"].pop("updatemenus")
@@ -251,7 +252,7 @@ def display_map_indicators(indicator):
     Output("dimensions_map", "figure"),
     Input("dimension", "value"))
 def display_map_dimensions(dimension):
-    fig = px.choropleth(dimensions_data, geojson=geo_data_file,
+    fig = px.choropleth(df_data, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
         color=dimension,
@@ -276,7 +277,7 @@ def display_map_dimensions(dimension):
     Input('dimension_x', 'value'),
     Input('dimension_y', 'value'))
 def display_corr_dimensions(dimension_x, dimension_y):
-    fig = px.scatter(dimensions_data, x=dimension_x, y=dimension_y, 
+    fig = px.scatter(df_data, x=dimension_x, y=dimension_y, 
                  hover_name='territorio', color='area', animation_frame='anno',
                  hover_data={'area':False, 'anno': False, dimension_x: ':.3g', dimension_y:':.3g'},)
     fig.update_traces(marker={'size': 15})
@@ -300,8 +301,22 @@ def display_ranking(feature, year):
     Output("evolution", "figure"),
     Input("evolution_feature", "value"),
     Input("evolution_territory", "value"))
-def display_evolution(feature, territory):
-    return "In preparazione"
+def display_evolution(features, territories):
+    df = df_data.query("territorio == @territories").rename(columns={'anno':'Anno', 'territorio':'Territorio'})
+    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Sottoindice/Dimensione', value_name='Punteggio')
+    fig = px.line(df, x='Anno', y='Punteggio', 
+                hover_name='Territorio',
+                color='Territorio',
+                line_dash='Sottoindice/Dimensione',
+                hover_data={'Territorio':False}
+        )
+    #fig.update_traces(marker={'size': 15})
+    fig.update_layout(
+        legend_title = 'Legenda',
+        xaxis = dict(tickvals = df['Anno'].unique()),
+        yaxis = dict(title='Punteggio')
+        )
+    return fig
 
 #### Degug ####
 if __name__ == "__main__":
