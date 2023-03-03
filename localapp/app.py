@@ -4,14 +4,18 @@
 
 
 #### Preamble ####
-# Libraries
-from dash import Dash, dcc, html, Input, Output, dash_table
+# Libraries and functions
+from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
 
 import plotly.express as px
 import pandas as pd
 import plotly.io as pio
+import numpy as np
+
+def sig_round(x, precision=3):
+    return np.float64(f'{x:.{precision}g}')
 
 # Title
 title = 'WeWorld Mai più invisibili 2023'
@@ -46,15 +50,15 @@ app.layout = dbc.Container([
         html.Hr(),
         dbc.Tabs(
             [
-                dbc.Tab(label="Mappa indice", tab_id="index"),
-                dbc.Tab(label="Mappa dimensioni", tab_id="dimensions"),
-                dbc.Tab(label="Mappa indicatori", tab_id="indicators"),
-                dbc.Tab(label="Correlazione dimensioni", tab_id="correlations"),
+                dbc.Tab(label="Mappa", tab_id="map_features"),
+                #dbc.Tab(label="Mappa dimensioni", tab_id="dimensions"),
+                dbc.Tab(label="Mappa Indicatori", tab_id="map_indicators"),
+                dbc.Tab(label="Correlazione", tab_id="correlations"),
                 dbc.Tab(label="Classifica", tab_id="ranking"),
-                dbc.Tab(label="Evoluzione temporale", tab_id="evolution"),
+                dbc.Tab(label="Evoluzione", tab_id="evolution"),
             ],
             id="tabs",
-            active_tab="index",
+            active_tab="map_features",
         ),
         html.Div(id="tab-content", className="p-4"),
     ],
@@ -68,22 +72,22 @@ app.layout = dbc.Container([
     [Input("tabs", "active_tab"), Input("store", "data")])
 def render_tab_content(active_tab, data):
     if active_tab is not None:
-        if active_tab == "index":
-            options_list = df_data.columns[4:7]
+        if active_tab == "map_features":
+            options_list = df_data.columns[4:23]
             return html.Div([
-                html.P("Seleziona un Indice:"),
+                html.P("Seleziona un Indice/Dimensione:"),
                 dcc.Dropdown(
-                    id='subindex',
+                    id='feature',
                     options=options_list,
                     value=options_list[0],
-                    style={"width": "40%"}
+                    style={"width": "60%"}
                 ),
                 dcc.Graph(
-                    id="index_map",
+                    id="map",
                     style={'width': '90vw', 'height': '70vh'}
                 )
             ])
-        elif active_tab == "indicators":
+        elif active_tab == "map_indicators":
             #return "Sezione ancora da creare."
             options_list = [f"{num}: {df_meta.loc[num]['nome']}" for num in df_meta.index]
             return html.Div([
@@ -123,29 +127,13 @@ def render_tab_content(active_tab, data):
                     #responsive=True
                 ),
             ])
-        elif active_tab == "dimensions":
-            options_list = df_data.columns[7:23]
-            return html.Div([
-                html.P("Seleziona una Dimensione:"),
-                dcc.Dropdown(
-                    id='dimension',
-                    options = options_list ,
-                    value=options_list[0],
-                    style={"width": "80%"}
-                ),
-                dcc.Graph(
-                    id="dimensions_map",
-                    style={'width': '90vw', 'height': '70vh'}
-                    #responsive=True
-                )
-            ])
         elif active_tab == 'ranking':
             options_list = options_list = df_data.columns[4:23]
             years_list = df_data['anno'].unique() 
             return html.Div([
                 dbc.Row([
                 dbc.Col([
-                html.P("Seleziona un sottoindice o una dimensione:"),
+                html.P("Seleziona un Indice/Dimensione:"),
                 dcc.Dropdown(
                     id="ranking_feature",
                     options = options_list,
@@ -155,11 +143,14 @@ def render_tab_content(active_tab, data):
                 dbc.Col([
                 html.P("Seleziona un anno:"),
                 dcc.Dropdown(
-                    id='ranking_ year',
+                    id='ranking_year',
                     options = years_list ,
                     value = years_list[-1],
                     style={"width": "75%"}
                 )])]),
+                html.Div(
+                    id='ranking_table'
+                )
             ])
         elif active_tab == 'evolution':
             territories_list = df_data['territorio'].unique()
@@ -167,7 +158,7 @@ def render_tab_content(active_tab, data):
             return html.Div([
                 dbc.Row([
                 dbc.Col([
-                html.P("Seleziona un sottoindice o una dimensione:"),
+                html.P("Seleziona un Indice/Dimensione:"),
                 dcc.Dropdown(
                     id="evolution_feature",
                     options = options_list,
@@ -194,13 +185,14 @@ def render_tab_content(active_tab, data):
 
 # Index map
 @app.callback(
-    Output("index_map", "figure"),
-    Input("subindex", "value"))
-def display_map_index(subindex):
-    fig = px.choropleth(df_data, geojson=geo_data_file,
+    Output("map", "figure"),
+    Input("feature", "value"))
+def display_map_index(feature):
+    df = df_data[df_data['area'].notna()]
+    fig = px.choropleth(df, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
-        color=subindex,
+        color=feature,
         range_color=[20,80],
         color_continuous_scale='RdYlGn',
         hover_name='territorio',
@@ -228,10 +220,12 @@ def display_map_indicators(indicator):
     else:
         color_scale = 'RdYlGn'
         limits_scale = [df_meta.loc[int(indicator)]['worst_value'], df_meta.loc[int(indicator)]['best_value']]
-    fig = px.choropleth(df_data, geojson=geo_data_file,
+    df = df_data
+    fig = px.choropleth(df, geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
         projection='natural earth', animation_frame='anno',
         color=indicator,
+        labels={indicator: f'Indicatore {indicator}'},
         range_color=limits_scale,
         color_continuous_scale=color_scale,
         hover_name='territorio',
@@ -277,7 +271,8 @@ def display_map_dimensions(dimension):
     Input('dimension_x', 'value'),
     Input('dimension_y', 'value'))
 def display_corr_dimensions(dimension_x, dimension_y):
-    fig = px.scatter(df_data, x=dimension_x, y=dimension_y, 
+    df = df_data[df_data['area'].notna()]
+    fig = px.scatter(df, x=dimension_x, y=dimension_y, 
                  hover_name='territorio', color='area', animation_frame='anno',
                  hover_data={'area':False, 'anno': False, dimension_x: ':.3g', dimension_y:':.3g'},)
     fig.update_traces(marker={'size': 15})
@@ -290,11 +285,24 @@ def display_corr_dimensions(dimension_x, dimension_y):
 
 # Ranking
 @app.callback(
-    Output("ranking_table", "figure"),
+    Output("ranking_table", "children"),
     Input("ranking_feature", "value"),
     Input("ranking_year", "value"))
 def display_ranking(feature, year):
-    return "In preparazione"
+    df = df_data[df_data['area'].notna()].set_index('territorio') 
+    final = df[df['anno']==year][[feature]]
+    initial = df[df['anno']==2018][[feature]]
+    final['Posizione'] = final[feature].rank(ascending=False, method='min')
+    final['Variazione dal 2018'] = (final[feature]-initial[feature]).apply(sig_round)
+    final = final.reset_index().rename(columns={'territorio':'Territorio', feature:'Punteggio'}).sort_values('Posizione')
+    table = dbc.Table.from_dataframe(
+                    final[['Posizione', 'Territorio', 'Punteggio', 'Variazione dal 2018']],
+                    bordered=False,
+                    hover=True,
+                    responsive=True,
+                    striped=True,
+                )
+    return table
 
 # Evolution
 @app.callback(
@@ -303,11 +311,11 @@ def display_ranking(feature, year):
     Input("evolution_territory", "value"))
 def display_evolution(features, territories):
     df = df_data.query("territorio == @territories").rename(columns={'anno':'Anno', 'territorio':'Territorio'})
-    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Sottoindice/Dimensione', value_name='Punteggio')
+    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Indice/Dimensione', value_name='Punteggio')
     fig = px.line(df, x='Anno', y='Punteggio', 
                 hover_name='Territorio',
                 color='Territorio',
-                line_dash='Sottoindice/Dimensione',
+                line_dash='Indice/Dimensione',
                 hover_data={'Territorio':False}
         )
     #fig.update_traces(marker={'size': 15})
