@@ -74,58 +74,109 @@ def render_tab_content(active_tab, data):
     if active_tab is not None:
         if active_tab == "map_features":
             options_list = df_data.columns[4:23]
+            years_list = df_data['anno'].unique()
             return html.Div([
-                html.P("Seleziona un Indice/Dimensione:"),
-                dcc.Dropdown(
+                dbc.Row([
+                dbc.Col([
+                    html.P("Seleziona un Indice/Dimensione:"),
+                    dcc.Dropdown(
                     id='feature',
                     options=options_list,
                     value=options_list[0],
-                    style={"width": "60%"}
-                ),
+                    style={"width": "60%"})
+                ]),
+                dbc.Col([
+                    html.P("Seleziona un anno:"), 
+                    dcc.Slider(
+                        years_list[0],
+                        years_list[-1],
+                        step=None,
+                        id='slider_year',
+                        value=years_list[-1],
+                        marks={str(year): str(year) for year in years_list})],
+                    width=3)], 
+                justify='evenly'),                
                 dcc.Graph(
                     id="map",
-                    style={'width': '90vw', 'height': '70vh'}
+                    #style={'width': '90vw', 'height': '70vh'}
                 )
             ])
         elif active_tab == "map_indicators":
             #return "Sezione ancora da creare."
             options_list = [f"{num}: {df_meta.loc[num]['nome']}" for num in df_meta.index]
+            years_list = df_data['anno'].unique()
+            kind_list = ['Dati', 'Punteggi']
             return html.Div([
-                html.P("Seleziona un indicatore:"),
-                dcc.Dropdown(
+                dbc.Row([
+                dbc.Col([
+                    html.P("Seleziona un Indicatore:"),
+                    dcc.Dropdown(
                     id='indicator',
-                    options = options_list ,
+                    options=options_list,
                     value=options_list[0],
-                    style={"width": "80%"}
+                    style={"width": "50%"})]
                 ),
+                dbc.Col([
+                    html.P("Scegli la tipologia:"),
+                    dcc.RadioItems(
+                    id='indicator_kind',
+                    options=kind_list,
+                    value=options_list[1])],
+                    width=3
+                ),
+                dbc.Col([
+                    html.P("Seleziona un anno:"), 
+                    dcc.Slider(
+                        years_list[0],
+                        years_list[-1],
+                        step=None,
+                        id='slider_year',
+                        value=years_list[-1],
+                        marks={str(year): str(year) for year in years_list})],
+                    width=3
+                )], justify='evenly'),                
                 dcc.Graph(
                     id="indicators_map",
-                    style={'width': '90vw', 'height': '70vh'}
-                    #responsive=True
+                    #style={'width': '90vw', 'height': '70vh'}
                 )
             ])
         elif active_tab == "correlations":
             options_list = df_data.columns[4:23]
+            years_list = df_data['anno'].unique()
             return html.Div([
-                html.P("Seleziona due Indici/Dimensioni da confrontare:"),
                 dbc.Row([
-                dbc.Col(dcc.Dropdown(
+                dbc.Col([
+                    html.P("Seleziona un Indice/Dimensione:"),
+                    dcc.Dropdown(
                     id="dimension_x",
                     options = options_list,
                     value=options_list[0],
                     style={"width": "75%"}
-                )),
-                dbc.Col(dcc.Dropdown(
-                    id='dimension_y',
-                    options = options_list ,
-                    value = options_list[1],
+                )]),
+                dbc.Col([
+                    html.P("Seleziona un altro Indice/Dimensione:"),
+                    dcc.Dropdown(
+                    id="dimension_y",
+                    options = options_list,
+                    value=options_list[1],
                     style={"width": "75%"}
-                ))]),
+                )]),
+                dbc.Col([
+                    html.P("Seleziona un anno:"), 
+                    dcc.Slider(
+                        years_list[0],
+                        years_list[-1],
+                        step=None,
+                        id='slider_year',
+                        value=years_list[-1],
+                        marks={str(year): str(year) for year in years_list})],
+                    width=3)], 
+                justify='evenly'),
                 dcc.Graph(
                     id="dimensions_correlation",
-                    style={'width': '90vw', 'height': '70vh'}
-                    #responsive=True
-                ),
+                    #style={'width': '90vw', 'height': '70vh'}
+                    responsive=True
+                )
             ])
         elif active_tab == 'ranking':
             options_list = options_list = df_data.columns[4:23]
@@ -142,12 +193,15 @@ def render_tab_content(active_tab, data):
                 )]),
                 dbc.Col([
                 html.P("Seleziona un anno:"),
-                dcc.Dropdown(
-                    id='ranking_year',
-                    options = years_list ,
-                    value = years_list[-1],
-                    style={"width": "75%"}
-                )])]),
+                dcc.Slider(
+                        years_list[0],
+                        years_list[-1],
+                        step=None,
+                        id='slider_year',
+                        value=years_list[-1],
+                        marks={str(year): str(year) for year in years_list})
+                ],width=3)
+                ]),
                 html.Div(
                     id='ranking_table'
                 )
@@ -186,12 +240,13 @@ def render_tab_content(active_tab, data):
 # Index map
 @app.callback(
     Output("map", "figure"),
-    Input("feature", "value"))
-def display_map_index(feature):
+    Input("feature", "value"),
+    Input('slider_year', 'value'))
+def display_map_index(feature, year):
     df = df_data[df_data['area'].notna()]
-    fig = px.choropleth(df, geojson=geo_data_file,
+    fig = px.choropleth(df.loc[df['anno']==year], geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
-        projection='natural earth', animation_frame='anno', animation_group='codice_istat',
+        projection='natural earth',
         color=feature,
         range_color=[20,80],
         color_continuous_scale='RdYlGn',
@@ -203,16 +258,16 @@ def display_map_index(feature):
     fig.update_layout(
         margin={"r":0,"t":30,"l":0,"b":0},
         coloraxis_colorbar=dict(title="Punteggio"),
-        sliders = [dict(len=0.25, active= 4, x=0.5,xanchor='center', currentvalue= {"prefix": "Anno: "})],
     )
-    fig["layout"].pop("updatemenus")
     return fig
 
 # Indicators map
 @app.callback(
     Output("indicators_map", "figure"),
-    Input("indicator", "value"))
-def display_map_indicators(indicator):
+    Input("indicator", "value"),
+    Input('slider_year', 'value'),
+    Input('kind', 'value'))
+def display_map_indicators(indicator, year, kind):
     indicator = indicator.split(":")[0]
     if df_meta.loc[int(indicator)]['inverted']=='yes':
         color_scale = 'RdYlGn_r'
@@ -220,74 +275,62 @@ def display_map_indicators(indicator):
     else:
         color_scale = 'RdYlGn'
         limits_scale = [df_meta.loc[int(indicator)]['worst_value'], df_meta.loc[int(indicator)]['best_value']]
-    df = df_data
-    fig = px.choropleth(df, geojson=geo_data_file,
-        locations='codice_istat', featureidkey="properties.istat_code_num",
-        projection='natural earth', animation_frame='anno', animation_group='codice_istat',
-        color=indicator,
-        labels={indicator: f'Indicatore {indicator}'},
-        range_color=limits_scale,
-        color_continuous_scale=color_scale,
-        hover_name='territorio',
-        hover_data={'codice_istat':False, 'anno': False,
+    df = df_data.loc[df_data['anno']==year]
+    if kind=='Dati':
+        indicator = f'Indicatore {indicator}'
+        fig = px.choropleth(df, geojson=geo_data_file,
+            locations='codice_istat', featureidkey="properties.istat_code_num",
+            projection='natural earth', 
+            color=indicator,
+            range_color=limits_scale,
+            color_continuous_scale=color_scale,
+            hover_name='territorio',
+            hover_data={'codice_istat':False, 'anno': False,
                     indicator: ':.3g'},
-    )
+        )
+        fig.update_layout(
+            margin={"r":0,"t":30,"l":0,"b":0},
+            coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità']),
+        )
+    elif kind=='Punteggi':
+        indicator = f"{df_meta.loc[int(indicator)]['sottoindice']}|{df_meta.loc[int(indicator)]['dimensione']}|{indicator}"
+        fig = px.choropleth(df.loc[df['anno']==year], geojson=geo_data_file,
+            locations='codice_istat', featureidkey="properties.istat_code_num",
+            projection='natural earth',
+            color=indicator,
+            range_color=[0,100],
+            color_continuous_scale='RdYlGn',
+            hover_name='territorio',
+            hover_data={'codice_istat':False, 'anno': False,
+                    indicator: ':.3g'},
+        )
+        fig.update_layout(
+            margin={"r":0,"t":30,"l":0,"b":0},
+            coloraxis_colorbar=dict(title="Punteggio"),
+        )
     fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(
-        margin={"r":0,"t":30,"l":0,"b":0},
-        coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità']),
-        sliders = [dict(len=0.25, active= 4, x=0.5,xanchor='center', currentvalue= {"prefix": "Anno: "})]
-    )
-    fig["layout"].pop("updatemenus")
-    return fig
-
-# Dimension map
-@app.callback(
-    Output("dimensions_map", "figure"),
-    Input("dimension", "value"))
-def display_map_dimensions(dimension):
-    fig = px.choropleth(df_data, geojson=geo_data_file,
-        locations='codice_istat', featureidkey="properties.istat_code_num",
-        projection='natural earth', animation_frame='anno', animation_group='codice_istat',
-        color=dimension,
-        range_color=[0,100],
-        color_continuous_scale='RdYlGn',
-        hover_name='territorio',
-        hover_data={'codice_istat':False, 'anno': False,
-                    dimension: ':.3g'},
-    )
-    fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(
-        margin={"r":0,"t":30,"l":0,"b":0},
-        coloraxis_colorbar=dict(title='Punteggio'),
-        sliders = [dict(len=0.25, active= 4, x=0.5,xanchor='center', currentvalue= {"prefix": "Anno: "})]
-    )
-    fig["layout"].pop("updatemenus")
     return fig
 
 # Correlation
 @app.callback(
     Output("dimensions_correlation", "figure"),
     Input('dimension_x', 'value'),
-    Input('dimension_y', 'value'))
-def display_corr_dimensions(dimension_x, dimension_y):
+    Input('dimension_y', 'value'),
+    Input('slider_year', 'value'))
+def display_corr_dimensions(dimension_x, dimension_y,year):
     df = df_data[df_data['area'].notna()]
-    fig = px.scatter(df, x=dimension_x, y=dimension_y,
-                 hover_name='territorio', color='area', animation_frame='anno', animation_group='territorio',
-                 hover_data={'area':False, 'anno': False, dimension_x: ':.3g', dimension_y:':.3g'},  range_x=[10,90], range_y=[10,90])
+    fig = px.scatter(df.loc[df['anno']==year], x=dimension_x, y=dimension_y,
+                 hover_name='territorio', color='area',
+                 hover_data={'area':False, 'anno': False, dimension_x: ':.3g', dimension_y:':.3g'},  range_x=[20,90], range_y=[20,90])
     fig.update_traces(marker={'size': 15})
-    fig.update_layout(
-        legend_title = 'Area',
-        sliders = [dict(len=0.25, active= 4, x=0.5,xanchor='center', currentvalue= {"prefix": "Anno: "})]
-    )
-    fig["layout"].pop("updatemenus")
+    fig.update_layout(legend_title = 'Area')
     return fig
 
 # Ranking
 @app.callback(
     Output("ranking_table", "children"),
     Input("ranking_feature", "value"),
-    Input("ranking_year", "value"))
+    Input("slider_year", "value"))
 def display_ranking(feature, year):
     df = df_data[df_data['area'].notna()].set_index('territorio')
     final = df[df['anno']==year][[feature]]
