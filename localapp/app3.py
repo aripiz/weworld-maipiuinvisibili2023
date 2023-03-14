@@ -262,7 +262,7 @@ def render_tab_content(active_tab, data):
                     id='radar_year',
                     options = years_list ,
                     value = [years_list[0],years_list[-1]],
-                    #style={"width": "75%"}, 
+                    #style={"width": "75%"},
                     multi=True
                 )],width=3)
                 ]),
@@ -325,7 +325,7 @@ def display_map_indicators(indicator, year, kind):
             zoom=4.4, opacity=1, center=dict(lat=42, lon=12)
         )
         fig.update_layout(coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità'], x=0.92))
-    else:
+    elif kind=='Punteggi':
         col = f"{df_meta.loc[int(indicator)]['sottoindice']}|{df_meta.loc[int(indicator)]['dimensione']}|{indicator}"
         fig = px.choropleth_mapbox(df.loc[df['anno']==year], geojson=geo_data_file,
             locations='codice_istat', featureidkey="properties.istat_code_num",
@@ -414,8 +414,8 @@ def display_evolution(territories, year):
     features = df_data.columns[8:23]
     df = df_data.query("territorio == @territories and anno==@year").rename(columns={'anno':'Anno', 'territorio':'Territorio'})
     df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Indice/Dimensione', value_name='Punteggio')
-    fig = px.line_polar(df, theta='Indice/Dimensione', r='Punteggio', 
-                        line_close=True, color='Territorio', line_dash='Anno', 
+    fig = px.line_polar(df, theta='Indice/Dimensione', r='Punteggio',
+                        line_close=True, color='Territorio', line_dash='Anno',
                         range_r=[0,100],
                         start_angle=0,
                         hover_name='Territorio',
