@@ -29,6 +29,10 @@ load_figure_template(figure_template)
 pio.templates.default = figure_template
 
 #### External data ####
+# Mapbox
+map_token = "pk.eyJ1IjoiYXJpcGl6IiwiYSI6ImNsZjE5YzJrbjA2OWMzcHM0YzJyaXIydHAifQ.SWcexWOHS6ddnrGBx7idAw"
+map_style = "mapbox://styles/aripiz/clf1ay30l004n01lnzi17hjvj" 
+
 # Files link
 data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/maipiuinvisibili2023_data.csv"
 indicators_meta_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/maipiuinvisibili2023_metadata.csv"
@@ -114,15 +118,16 @@ def render_tab_content(active_tab, data):
                     id='indicator',
                     options=options_list,
                     value=options_list[0],
-                    style={"width": "50%"})]
+                    style={"width": "100%"})]
                 ),
                 dbc.Col([
                     html.P("Scegli la tipologia:"),
-                    dcc.RadioItems(
+                    dbc.RadioItems(
                     id='indicator_kind',
                     options=kind_list,
-                    value=options_list[1])],
-                    width=3
+                    inline=True,
+                    value= kind_list[1])],
+                    width=2
                 ),
                 dbc.Col([
                     html.P("Seleziona un anno:"), 
@@ -244,17 +249,27 @@ def render_tab_content(active_tab, data):
     Input('slider_year', 'value'))
 def display_map_index(feature, year):
     df = df_data[df_data['area'].notna()]
-    fig = px.choropleth(df.loc[df['anno']==year], geojson=geo_data_file,
+    # fig = px.choropleth(df.loc[df['anno']==year], geojson=geo_data_file,
+    #     locations='codice_istat', featureidkey="properties.istat_code_num",
+    #     projection='natural earth',
+    #     color=feature,
+    #     range_color=[20,80],
+    #     color_continuous_scale='RdYlGn',
+    #     hover_name='territorio',
+    #     hover_data={'codice_istat':False, 'anno': False,
+    #                 'Generale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
+    # )
+    fig = px.choropleth_mapbox(df.loc[df['anno']==year], geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
-        projection='natural earth',
         color=feature,
         range_color=[20,80],
         color_continuous_scale='RdYlGn',
         hover_name='territorio',
         hover_data={'codice_istat':False, 'anno': False,
                     'Generale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
+        opacity=1, center=dict(lat=42, lon=11.5), zoom=4.3,
     )
-    fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_layout(mapbox_style=map_style, mapbox_accesstoken=map_token)
     fig.update_layout(
         margin={"r":0,"t":30,"l":0,"b":0},
         coloraxis_colorbar=dict(title="Punteggio"),
@@ -266,7 +281,7 @@ def display_map_index(feature, year):
     Output("indicators_map", "figure"),
     Input("indicator", "value"),
     Input('slider_year', 'value'),
-    Input('kind', 'value'))
+    Input('indicator_kind', 'value'))
 def display_map_indicators(indicator, year, kind):
     indicator = indicator.split(":")[0]
     if df_meta.loc[int(indicator)]['inverted']=='yes':
@@ -277,39 +292,38 @@ def display_map_indicators(indicator, year, kind):
         limits_scale = [df_meta.loc[int(indicator)]['worst_value'], df_meta.loc[int(indicator)]['best_value']]
     df = df_data.loc[df_data['anno']==year]
     if kind=='Dati':
-        indicator = f'Indicatore {indicator}'
+        col = f'Indicatore {int(indicator)}'
         fig = px.choropleth(df, geojson=geo_data_file,
             locations='codice_istat', featureidkey="properties.istat_code_num",
             projection='natural earth', 
-            color=indicator,
+            color=col,
             range_color=limits_scale,
             color_continuous_scale=color_scale,
             hover_name='territorio',
             hover_data={'codice_istat':False, 'anno': False,
-                    indicator: ':.3g'},
+                    col: ':.3g'},
         )
         fig.update_layout(
             margin={"r":0,"t":30,"l":0,"b":0},
             coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità']),
         )
-    elif kind=='Punteggi':
-        indicator = f"{df_meta.loc[int(indicator)]['sottoindice']}|{df_meta.loc[int(indicator)]['dimensione']}|{indicator}"
+    else:
+        col = f"{df_meta.loc[int(indicator)]['sottoindice']}|{df_meta.loc[int(indicator)]['dimensione']}|{indicator}"
         fig = px.choropleth(df.loc[df['anno']==year], geojson=geo_data_file,
             locations='codice_istat', featureidkey="properties.istat_code_num",
             projection='natural earth',
-            color=indicator,
+            color=col,
             range_color=[0,100],
             color_continuous_scale='RdYlGn',
             hover_name='territorio',
             hover_data={'codice_istat':False, 'anno': False,
-                    indicator: ':.3g'},
+                    col: ':.3g'},
         )
         fig.update_layout(
             margin={"r":0,"t":30,"l":0,"b":0},
             coloraxis_colorbar=dict(title="Punteggio"),
         )
-    fig.update_geos(fitbounds="locations", visible=False)
-    return fig
+    return fig.update_geos(fitbounds="locations", visible=False)
 
 # Correlation
 @app.callback(
