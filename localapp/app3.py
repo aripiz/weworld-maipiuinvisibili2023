@@ -31,7 +31,7 @@ pio.templates.default = figure_template
 #### External data ####
 # Mapbox
 map_token = "pk.eyJ1IjoiYXJpcGl6IiwiYSI6ImNsZjE5YzJrbjA2OWMzcHM0YzJyaXIydHAifQ.SWcexWOHS6ddnrGBx7idAw"
-map_style = "mapbox://styles/aripiz/clf1ay30l004n01lnzi17hjvj" 
+map_style = "mapbox://styles/aripiz/clf1ay30l004n01lnzi17hjvj"
 
 # Files link
 data_file = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/maipiuinvisibili2023_data.csv"
@@ -54,12 +54,12 @@ app.layout = dbc.Container([
         html.Hr(),
         dbc.Tabs(
             [
-                dbc.Tab(label="Mappa", tab_id="map_features"),
-                #dbc.Tab(label="Mappa dimensioni", tab_id="dimensions"),
-                dbc.Tab(label="Mappa Indicatori", tab_id="map_indicators"),
-                dbc.Tab(label="Correlazione", tab_id="correlations"),
-                dbc.Tab(label="Classifica", tab_id="ranking"),
-                dbc.Tab(label="Evoluzione", tab_id="evolution"),
+                dbc.Tab(label="Mappa delle componenti", tab_id="map_features"),
+                dbc.Tab(label="Classifica dei territori", tab_id="ranking"),
+                dbc.Tab(label="Schede dei territori", tab_id="radar"),
+                dbc.Tab(label="Mappa degli indicatori", tab_id="map_indicators"),
+                dbc.Tab(label="Correlazioni delle componenti", tab_id="correlations"),
+                dbc.Tab(label="Evoluzione delle componenti", tab_id="evolution"),
             ],
             id="tabs",
             active_tab="map_features",
@@ -90,7 +90,7 @@ def render_tab_content(active_tab, data):
                     style={"width": "60%"})
                 ]),
                 dbc.Col([
-                    html.P("Seleziona un anno:"), 
+                    html.P("Seleziona un anno:"),
                     dcc.Slider(
                         years_list[0],
                         years_list[-1],
@@ -98,11 +98,12 @@ def render_tab_content(active_tab, data):
                         id='slider_year',
                         value=years_list[-1],
                         marks={str(year): str(year) for year in years_list})],
-                    width=3)], 
-                justify='evenly'),                
+                    width=3)],
+                justify='evenly'),
                 dcc.Graph(
                     id="map",
-                    #style={'width': '90vw', 'height': '70vh'}
+                    style={'height': '65vh'},
+                    responsive=True
                 )
             ])
         elif active_tab == "map_indicators":
@@ -130,7 +131,7 @@ def render_tab_content(active_tab, data):
                     width=2
                 ),
                 dbc.Col([
-                    html.P("Seleziona un anno:"), 
+                    html.P("Seleziona un anno:"),
                     dcc.Slider(
                         years_list[0],
                         years_list[-1],
@@ -139,10 +140,11 @@ def render_tab_content(active_tab, data):
                         value=years_list[-1],
                         marks={str(year): str(year) for year in years_list})],
                     width=3
-                )], justify='evenly'),                
+                )], justify='evenly'),
                 dcc.Graph(
                     id="indicators_map",
-                    #style={'width': '90vw', 'height': '70vh'}
+                    style={'height': '65vh'},
+                    responsive=True
                 )
             ])
         elif active_tab == "correlations":
@@ -167,7 +169,7 @@ def render_tab_content(active_tab, data):
                     style={"width": "75%"}
                 )]),
                 dbc.Col([
-                    html.P("Seleziona un anno:"), 
+                    html.P("Seleziona un anno:"),
                     dcc.Slider(
                         years_list[0],
                         years_list[-1],
@@ -175,11 +177,11 @@ def render_tab_content(active_tab, data):
                         id='slider_year',
                         value=years_list[-1],
                         marks={str(year): str(year) for year in years_list})],
-                    width=3)], 
+                    width=3)],
                 justify='evenly'),
                 dcc.Graph(
                     id="dimensions_correlation",
-                    #style={'width': '90vw', 'height': '70vh'}
+                    style={'height': '65vh'},
                     responsive=True
                 )
             ])
@@ -235,9 +237,39 @@ def render_tab_content(active_tab, data):
                     multi=True
                 )])]),
                 dcc.Graph(
-                    id="evolution",
-                    style={'width': '90vw', 'height': '70vh'}
-                    #responsive=True
+                    id="evolution_plot",
+                    style={'height': '65vh'},
+                    responsive=True
+                )
+            ])
+        elif active_tab == 'radar':
+            territories_list = df_data['territorio'].unique()
+            years_list = df_data['anno'].unique()
+            return html.Div([
+                dbc.Row([
+                dbc.Col([
+                html.P("Seleziona un territorio:"),
+                dcc.Dropdown(
+                    id='radar_territory',
+                    options = territories_list ,
+                    value = 'Italia',
+                    style={"width": "75%"},
+                    multi=True
+                )]),
+                dbc.Col([
+                html.P("Seleziona un anno:"),
+                dcc.Dropdown(
+                    id='radar_year',
+                    options = years_list ,
+                    value = [years_list[0],years_list[-1]],
+                    #style={"width": "75%"}, 
+                    multi=True
+                )],width=3)
+                ]),
+                dcc.Graph(
+                    id="radar_chart",
+                    style={'height': '65vh'},
+                    responsive=True
                 )
             ])
     return "Nessun elemento selezionato."
@@ -249,22 +281,23 @@ def render_tab_content(active_tab, data):
     Input('slider_year', 'value'))
 def display_map_index(feature, year):
     df = df_data[df_data['area'].notna()]
-    fig = px.choropleth(df.loc[df['anno']==year], geojson=geo_data_file,
+    fig = px.choropleth_mapbox(df.loc[df['anno']==year], geojson=geo_data_file,
         locations='codice_istat', featureidkey="properties.istat_code_num",
-        projection='natural earth', 
         color=feature,
         range_color=[20,80],
         color_continuous_scale='RdYlGn',
         hover_name='territorio',
         hover_data={'codice_istat':False, 'anno': False,
                     'Generale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
+        zoom=4.4, opacity=1, center=dict(lat=42, lon=12)
     )
+    fig.update_layout(coloraxis_colorbar=dict(title="Punteggio", x=0.92))
     fig.update_layout(
+        mapbox_style = map_style,
+        mapbox_accesstoken = map_token,
         margin={"r":0,"t":30,"l":0,"b":0},
-        coloraxis_colorbar=dict(title="Punteggio"),
     )
-    return fig.update_geos(fitbounds="locations", visible=False)
-
+    return fig
 # Indicators map
 @app.callback(
     Output("indicators_map", "figure"),
@@ -282,37 +315,34 @@ def display_map_indicators(indicator, year, kind):
     df = df_data.loc[df_data['anno']==year]
     if kind=='Dati':
         col = f'Indicatore {int(indicator)}'
-        fig = px.choropleth(df, geojson=geo_data_file,
+        fig = px.choropleth_mapbox(df, geojson=geo_data_file,
             locations='codice_istat', featureidkey="properties.istat_code_num",
-            projection='natural earth', 
             color=col,
             range_color=limits_scale,
             color_continuous_scale=color_scale,
             hover_name='territorio',
-            hover_data={'codice_istat':False, 'anno': False,
-                    col: ':.3g'},
+            hover_data={'codice_istat':False, 'anno': False, col: ':.3g'},
+            zoom=4.4, opacity=1, center=dict(lat=42, lon=12)
         )
-        fig.update_layout(
-            margin={"r":0,"t":30,"l":0,"b":0},
-            coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità']),
-        )
+        fig.update_layout(coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità'], x=0.92))
     else:
         col = f"{df_meta.loc[int(indicator)]['sottoindice']}|{df_meta.loc[int(indicator)]['dimensione']}|{indicator}"
-        fig = px.choropleth(df.loc[df['anno']==year], geojson=geo_data_file,
+        fig = px.choropleth_mapbox(df.loc[df['anno']==year], geojson=geo_data_file,
             locations='codice_istat', featureidkey="properties.istat_code_num",
-            projection='natural earth',
             color=col,
             range_color=[0,100],
             color_continuous_scale='RdYlGn',
             hover_name='territorio',
-            hover_data={'codice_istat':False, 'anno': False,
-                    col: ':.3g'},
+            hover_data={'codice_istat':False, 'anno': False, col: ':.3g'},
+            zoom=4.4, opacity=1, center=dict(lat=42, lon=12)
         )
-        fig.update_layout(
-            margin={"r":0,"t":30,"l":0,"b":0},
-            coloraxis_colorbar=dict(title="Punteggio"),
-        )
-    return fig.update_geos(fitbounds="locations", visible=False)
+        fig.update_layout(coloraxis_colorbar=dict(title="Punteggio", x=0.92))
+    fig.update_layout(
+        mapbox_style = map_style,
+        mapbox_accesstoken = map_token,
+        margin={"r":0,"t":30,"l":0,"b":0},
+    )
+    return fig
 
 # Correlation
 @app.callback(
@@ -324,7 +354,9 @@ def display_corr_dimensions(dimension_x, dimension_y,year):
     df = df_data[df_data['area'].notna()]
     fig = px.scatter(df.loc[df['anno']==year], x=dimension_x, y=dimension_y,
                  hover_name='territorio', color='area',
-                 hover_data={'area':False, 'anno': False, dimension_x: ':.3g', dimension_y:':.3g'},  range_x=[20,90], range_y=[20,90])
+                 hover_data={'area':False, 'anno': False, dimension_x: ':.3g', dimension_y:':.3g'},
+                 #range_x=[20,90], range_y=[20,90]
+                 )
     fig.update_traces(marker={'size': 15})
     fig.update_layout(legend_title = 'Area')
     return fig
@@ -352,7 +384,7 @@ def display_ranking(feature, year):
 
 # Evolution
 @app.callback(
-    Output("evolution", "figure"),
+    Output("evolution_plot", "figure"),
     Input("evolution_feature", "value"),
     Input("evolution_territory", "value"))
 def display_evolution(features, territories):
@@ -362,16 +394,37 @@ def display_evolution(features, territories):
                 hover_name='Territorio',
                 color='Territorio',
                 line_dash='Indice/Dimensione',
-                hover_data={'Territorio':False}
+                hover_data={'Territorio':False},
+                markers=True
         )
-    #fig.update_traces(marker={'size': 15})
+    #fig.update_traces(marker={'size': 8})
     fig.update_layout(
-        legend_title = 'Legenda',
+        legend_title = 'Territori, Componenti',
         xaxis = dict(tickvals = df['Anno'].unique()),
         yaxis = dict(title='Punteggio')
         )
     return fig
 
+# Radar
+@app.callback(
+    Output("radar_chart", "figure"),
+    Input("radar_territory", "value"),
+    Input("radar_year", "value"))
+def display_evolution(territories, year):
+    features = df_data.columns[8:23]
+    df = df_data.query("territorio == @territories and anno==@year").rename(columns={'anno':'Anno', 'territorio':'Territorio'})
+    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Indice/Dimensione', value_name='Punteggio')
+    fig = px.line_polar(df, theta='Indice/Dimensione', r='Punteggio', 
+                        line_close=True, color='Territorio', line_dash='Anno', 
+                        range_r=[0,100],
+                        start_angle=0,
+                        hover_name='Territorio',
+                        hover_data={'Territorio':False, 'Anno':True, 'Indice/Dimensione':True, 'Punteggio':True}
+        )
+    #fig.update_traces(fill='toself')
+
+    return fig
+
 #### Degug ####
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8051)
