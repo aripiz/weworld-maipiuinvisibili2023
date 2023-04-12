@@ -1,2 +1,7 @@
-# Ignora i file di sistema Mac
+# File da ignorare
+__pycache__/
+*.py[cod]
+*$py.class
 .DS_store
+.pyc
+.ipynb_checkpoints
