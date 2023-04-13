@@ -1,8 +1,5 @@
 :root {
-    --primary: #005D9E;
-    --secondary: #E98D00;
-}
-
-body {
+    --primary-color: #005D9E;
+    --secondary-color: #E98D00;
     font-family: 'Open Sans', Tahoma, Geneva, Verdana, sans-serif;
-  }
+}
