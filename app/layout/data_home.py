@@ -1,5 +1,6 @@
 # data_home.py
 
+from matplotlib import legend
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
@@ -19,14 +20,15 @@ def display_map_home():
         locations='codice_istat', featureidkey="properties.istat_code_num",
         color='Livello',
         #range_color=[20,80],
-        color_discrete_sequence=COLOR_SCALE,
-        category_orders={'Livello': tier_labels[:-2]},
+        color_discrete_map=dict(zip(tier_labels,COLOR_SCALE)),
+        category_orders={'Livello': tier_labels},
         hover_name='territorio',
         hover_data={'codice_istat':False, 'anno': False,
                     'Generale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
         zoom=4.5, opacity=1, center=dict(lat=42, lon=12)
     )
-    fig.update_layout(coloraxis_colorbar=dict(title="Livello", x=0.92))
+    fig.update_layout(legend=dict(xanchor='right', yanchor='top', x=0.95, y=0.95))
+    #fig.update_layout(coloraxis_colorbar=dict(title="Livello", x=0.92))
     fig.update_layout(
         mapbox_style = MAP_STYLE,
         mapbox_accesstoken = MAP_TOKEN,
