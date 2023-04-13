@@ -8,6 +8,8 @@ from layout.callbacks import render_data
 from layout.callbacks import render_tab
 from layout.callbacks import toggle_modal
 
+from index import NOTES_FILE, REPORT_FILE
+
 from layout.data_download import modal_data_download
 
 # Header and footer
@@ -33,7 +35,7 @@ pages_nav = dbc.Nav(
         dbc.DropdownMenu(
             [
                 dbc.DropdownMenuItem("Rapporto", href="#"), 
-                dbc.DropdownMenuItem("Note tecniche", href="#"), 
+                dbc.DropdownMenuItem("Note tecniche", href=NOTES_FILE), 
                 dbc.DropdownMenuItem("Dati", id='open_download', n_clicks=0),
                 modal_data_download
             ],
