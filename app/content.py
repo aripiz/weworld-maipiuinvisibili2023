@@ -1,6 +1,5 @@
 # content.py
 
-from click import style
 from index import app
 from dash import dcc, html, page_container
 import dash_bootstrap_components as dbc

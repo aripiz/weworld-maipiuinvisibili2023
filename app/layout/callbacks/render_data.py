@@ -51,12 +51,12 @@ def display_map_index(feature, year):
     Input('indicator_kind', 'value'))
 def display_map_indicators(indicator, year, kind):
     indicator = indicator.split(":")[0]
-    if df_meta.loc[int(indicator)]['inverted']=='yes':
+    if df_meta.loc[int(indicator)]['orientamento_negativo']=='sì':
         color_scale = COLOR_SCALE[::-1]
-        limits_scale = [df_meta.loc[int(indicator)]['best_value'], df_meta.loc[int(indicator)]['worst_value']]
+        limits_scale = [df_meta.loc[int(indicator)]['valore_migliore'], df_meta.loc[int(indicator)]['valore_peggiore']]
     else:
         color_scale = COLOR_SCALE
-        limits_scale = [df_meta.loc[int(indicator)]['worst_value'], df_meta.loc[int(indicator)]['best_value']]
+        limits_scale = [df_meta.loc[int(indicator)]['valore_peggiore'], df_meta.loc[int(indicator)]['valore_migliore']]
     df = df_data.loc[df_data['anno']==year]
     if kind=='Dati':
         col = f'Indicatore {int(indicator)}'

@@ -25,7 +25,7 @@ def display_map_home():
         locations='codice_istat', featureidkey="properties.istat_code_num",
         color='Livello',
         #range_color=[20,80],
-        color_discrete_sequence=COLOR_SCALE[1:5],
+        color_discrete_sequence=COLOR_SCALE,
         category_orders={'Livello': tier_labels[:-2]},
         hover_name='territorio',
         hover_data={'codice_istat':False, 'anno': False,
@@ -39,7 +39,6 @@ def display_map_home():
         margin={"r":0,"t":30,"l":0,"b":0},
     )
     return fig
-
 
 layout = html.Div([
         dbc.Row(dbc.Col(dcc.Markdown("## L’Indice _Mai più invisibili_"))),
