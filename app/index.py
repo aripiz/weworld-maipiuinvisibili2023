@@ -7,17 +7,13 @@ import pandas as pd
 # Title
 TITLE = 'WeWorld Mai più invisibili 2023'
 
-# Themes
-THEME = dbc.themes.LUMEN
+# Themes and colors
+#THEME = dbc.themes.LUMEN
 FIGURE_TEMPLATE = 'lumen'
-STYLE_CSS = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/app/assets/style.css"
-#CSS = "https://codepen.io/chriddyp/pen/brPBPO.css"
-#DBC_CSS = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
-#FA621 = "https://use.fontawesome.com/releases/v6.2.1/css/all.css"
-
+STYLE_CSS = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/app/assets/bootstrap.min.csss"
+DBC_CSS = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
 
 #COLOR_SCALE_OLD = ['#00876c','#65a971','#f9e68f','#f4b164', '#ea7a50','#d43d51'][::-1]
-
 COLOR_SCALE = ["#D53A50", "#E97B4E", "#F0B060", "#DECE58", "#64A972", "#3E876B"]
 
 # Mapbox
@@ -41,7 +37,7 @@ df_meta = pd.read_csv(META_FILE, index_col=0)
 app = Dash(
     __name__, 
     title=TITLE,
-    external_stylesheets=[THEME,DBC_CSS], 
+    external_stylesheets=[STYLE_CSS,DBC_CSS], 
     suppress_callback_exceptions=True, 
     use_pages=True,
     #meta_tags=[{"name": "viewport", "content": "width=device-width"}]
