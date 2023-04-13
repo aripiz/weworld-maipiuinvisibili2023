@@ -1,6 +1,5 @@
 # data_home.py
 
-from matplotlib import legend
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
