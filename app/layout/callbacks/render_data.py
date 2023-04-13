@@ -158,13 +158,13 @@ def display_evolution(features, territories):
 def display_radar(territories, year):
     features = df_data.columns[8:23]
     df = df_data.query("territorio == @territories and anno==@year").rename(columns={'anno':'Anno', 'territorio':'Territorio'})
-    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Indice/Dimensione', value_name='Punteggio')
-    fig = px.line_polar(df, theta='Indice/Dimensione', r='Punteggio',
+    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Dimensione', value_name='Punteggio')
+    fig = px.line_polar(df, theta='Dimensione', r='Punteggio',
                         line_close=True, color='Territorio', line_dash='Anno',
                         range_r=[0,100],
                         start_angle=0,
                         hover_name='Territorio',
-                        hover_data={'Territorio':False, 'Anno':True, 'Indice/Dimensione':True, 'Punteggio':True}
+                        hover_data={'Territorio':False, 'Anno':True, 'Dimensione':True, 'Punteggio':True}
         )
     return fig
 

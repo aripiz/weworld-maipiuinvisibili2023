@@ -8,7 +8,7 @@ import pandas as pd
 TITLE = 'WeWorld Mai più invisibili 2023'
 
 # Themes and colors
-#THEME = dbc.themes.LUMEN
+THEME = dbc.themes.LUMEN
 FIGURE_TEMPLATE = 'lumen'
 STYLE_CSS = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/app/assets/bootstrap.min.csss"
 DBC_CSS = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
@@ -37,7 +37,7 @@ df_meta = pd.read_csv(META_FILE, index_col=0)
 app = Dash(
     __name__, 
     title=TITLE,
-    external_stylesheets=[STYLE_CSS,DBC_CSS], 
+    external_stylesheets=[THEME, DBC_CSS], 
     suppress_callback_exceptions=True, 
     use_pages=True,
     #meta_tags=[{"name": "viewport", "content": "width=device-width"}]

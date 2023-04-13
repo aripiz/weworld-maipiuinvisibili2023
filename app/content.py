@@ -58,6 +58,7 @@ app.layout = dbc.Container(
         #footer
     ],
     fluid=True,
-    className="dbc p-4",     
+    className="dbc",     
+    style={"padding": "1.5rem"}
     #style = {"display": "flex","flex-direction": "column","height": "100vh"}
 )
