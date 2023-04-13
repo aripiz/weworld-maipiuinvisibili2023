@@ -171,10 +171,11 @@ def display_radar(territories, year):
     fig = px.line_polar(df, theta='Dimensione', r='Punteggio',
                         line_close=True, color='Territorio', line_dash='Anno',
                         range_r=[0,100],
-                        start_angle=0,
+                        start_angle=90,
                         hover_name='Territorio',
                         hover_data={'Territorio':False, 'Anno':True, 'Dimensione':True, 'Punteggio':True}
         )
+    fig.update_polars(radialaxis=dict(angle=90, tickangle=90))
     return fig
 
 # Radar table
