@@ -31,10 +31,10 @@ pages_nav = dbc.Nav(
     [
         dbc.NavItem(dbc.NavLink("Panoramica", active='exact', href='/')),
         dbc.NavItem(dbc.NavLink("Esplora i dati", active='exact', href="/data")),
-        dbc.NavItem(dbc.NavLink("Metodologia e definizioni", active='exact', href="/methodology")),
+        dbc.NavItem(dbc.NavLink("Metodologia", active='exact', href="/methodology")),
         dbc.DropdownMenu(
             [
-                dbc.DropdownMenuItem("Rapporto", href="#"), 
+                dbc.DropdownMenuItem("Rapporto", href=REPORT_FILE), 
                 dbc.DropdownMenuItem("Note tecniche", href=NOTES_FILE), 
                 dbc.DropdownMenuItem("Dati", id='open_download', n_clicks=0),
                 modal_data_download
