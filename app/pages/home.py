@@ -28,8 +28,8 @@ layout = html.Div([
                             dbc.ListGroupItem("Tiene conto delle condizioni di donne e minori in maniera congiunta, interdipendente e simultanea, riconoscendo un nesso tra l’implementazione dei diritti di una categoria sul benessere dell’altra e viceversa."),
                             dbc.ListGroupItem("Considera il concetto di inclusione al di là di un’accezione dello sviluppo puramente economicistica, aprendo a una visione ampia, multidimensionale, dinamica e positiva, personale, sociale e intersezionale, universale.") #(in linea con l’Agenda 2030 e le cosiddette 5P: People, Planet, Prosperity, Partnership, Peace)
                         ], flush=True)]))
-            ],),
-           dbc.Col(dcc.Graph(figure=display_map_home(), responsive=True, style ={"height":"70vh"}), align='center')        
+            ], lg = 6, xs = 12),
+           dbc.Col(dcc.Graph(figure=display_map_home(), responsive=True, style ={"height":"75vh"}), lg = 6, xs = 12, align='center')        
         ],
         justify='evenly'),
         # html.Br(),
