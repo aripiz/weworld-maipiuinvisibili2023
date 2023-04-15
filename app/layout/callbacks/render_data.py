@@ -196,3 +196,32 @@ def display_radar_table(territories, year):
                     striped=True,
                 )
     return table
+
+# Indicators description
+@app.callback(
+    [Output("indicator_num", "children"),
+     Output("indicator_name", "children"),
+     Output("indicator_sub", "children"),
+     Output("indicator_dim", "children"),
+     Output("indicator_des", "children"),
+     Output("indicator_unit", "children"),
+     Output("indicator_update", "children"),
+     Output("indicator_source", "children"),
+     Output("indicator_source", "href"),
+    ],
+    Input("indicator", "value"))
+def update_indicator_description(indicator):
+    indicator = indicator.split(":")[0]
+    data = df_meta.loc[int(indicator)]
+    info = [indicator, 
+            data['nome'], 
+            data['sottoindice'],
+            data['dimensione'],
+            data['descrizione'],
+            data['unità'],
+            data['aggiornamento'],
+            data['fonte'],
+            data['link']
+            ]
+    return info
+    

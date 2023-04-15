@@ -10,7 +10,7 @@ from layout.callbacks import toggle_modal
 
 from index import NOTES_FILE, REPORT_FILE
 
-from layout.data_download import modal_data_download
+from layout.layout_download import modal_data_download
 
 # Header and footer
 header = dbc.Row(
@@ -59,6 +59,6 @@ app.layout = dbc.Container(
     ],
     fluid=True,
     className="dbc",     
-    style={"padding": "1.5rem"}
+    style={"padding": "2rem"}
     #style = {"display": "flex","flex-direction": "column","height": "100vh"}
 )

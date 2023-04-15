@@ -26,8 +26,7 @@ META_FILE = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili20
 GEO_FILE = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/italy_regions_low.json"
 
 NOTES_FILE = "https://github.com/aripiz/weworld-maipiuinvisibili2023/raw/master/data/WeWorld-MaiPi%C3%B9Invisibili-2023_NoteTecniche.pdf"
-
-REPORT_FILE = ""
+REPORT_FILE = "https://github.com/aripiz/weworld-maipiuinvisibili2023/raw/master/data/WeWorld-MaiPi%C3%B9Invisibili-2023_Report.pdf"
 
 # Loading
 df_data = pd.read_csv(DATA_FILE)

@@ -16,7 +16,7 @@ tabs = html.Div(dbc.Tabs(
         dbc.Tab(label="Correlazioni delle componenti", tab_id="correlations"),
         dbc.Tab(label="Evoluzione delle componenti", tab_id="evolution"),
     ],
-    id="tabs",
+    id="data_tabs",
     active_tab="map_features",
     className= 'd-flex justify-content-around'
 ))
@@ -24,6 +24,6 @@ tabs = html.Div(dbc.Tabs(
 layout = html.Div(
     [
         dbc.Row(dbc.Col(tabs)),
-        dbc.Row(dbc.Col(id="tab-content"), class_name='mt-4')
+        dbc.Row(dbc.Col(id="data_tab_content"), class_name='mt-4')
     ],
 )
