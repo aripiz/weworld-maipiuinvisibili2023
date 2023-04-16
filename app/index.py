@@ -36,7 +36,7 @@ df_meta = pd.read_csv(META_FILE, index_col=0)
 app = Dash(
     __name__, 
     title=TITLE,
-    external_stylesheets=[THEME, DBC_CSS,], 
+    external_stylesheets=[THEME,STYLE_CSS, DBC_CSS], 
     suppress_callback_exceptions=True, 
     use_pages=True,
     #meta_tags=[{"name": "viewport", "content": "width=device-width"}]

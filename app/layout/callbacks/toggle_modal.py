@@ -27,7 +27,7 @@ def toggle_modal(n1, n2, is_open):
 def download_excel(n_clicks, indicators, territories):
     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
     if 'download_button' in changed_id:
-        colonne_metadati = ['sottoindice', 'dimensione', 'nome', 'unità', 'descrizione', 'aggiornamento', 'fonte', 'note']
+        colonne_metadati = ['sottoindice', 'dimensione', 'nome', 'unità', 'descrizione', 'aggiornamento', 'fonte', 'link']
         colonne_dati = [f'Indicatore {i}' for i in range(1,31)]
 
         meta = df_meta[colonne_metadati]  

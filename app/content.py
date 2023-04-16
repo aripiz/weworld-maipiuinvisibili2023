@@ -18,11 +18,12 @@ header = dbc.Row(
 )
 
 footer = dbc.Row([
-                dbc.Col(html.Div("WeWorld Onlus"), style={'text-align':'left'} ),
-                dbc.Col(html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz")]), style={'text-align':'right'} ),
-                ],   
-                justify='end',
-                style={ "margin-top":"auto", } #"padding-top": "1rem", "padding-bottom": "1rem"
+    dbc.Col(html.Div("WeWorld Onlus"), style={'text-align':'left'} ),
+    dbc.Col(html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')]), style={'text-align':'right'})],   
+    justify='around',
+    class_name='fixed-bottom',
+    style={'background-color': '#005D9E', 'color':'white', "margin-top":"auto", 'padding-left':'1.5rem', 'padding-right':'1.5rem' }
+                #"padding-top": "1rem", "padding-bottom": "1rem"
 )      
             #style={"position": "absolute", "bottom": "0", 'left':"0", "right":"0", "width": "100%", "height": "2.5rem","text-align":"center"}
 
@@ -47,7 +48,7 @@ pages_nav = dbc.Nav(
     horizontal='center'
 )
 
-page = dbc.Row(dbc.Col(page_container), className="my-2", style={"display": "flex", "flex-direction": "column",'justify-content': 'around'})
+page = dbc.Row(dbc.Col(page_container), className="my-4", style={"display": "flex", "flex-direction": "column",'justify-content': 'around'})
 
 # Main layout
 app.layout = dbc.Container(
@@ -55,10 +56,10 @@ app.layout = dbc.Container(
         #header,
         pages_nav,
         page,
-        #footer
+        footer
     ],
     fluid=True,
     className="dbc",     
-    style={"padding": "2rem"}
+    style={"padding": "1.5rem"}
     #style = {"display": "flex","flex-direction": "column","height": "100vh"}
 )

@@ -41,14 +41,14 @@ modal_data_download = dbc.Modal(
                     )
                 ])]),
                 html.Br(),
-                dbc.Button('Download', id='download_button', n_clicks=0),
+                dbc.Button('Download', id='download_button', n_clicks=0,),
                 dcc.Download(id='download_file')
             ],
             style={'text-align':'center'})
         ),
         dbc.ModalFooter(
             dbc.Button(
-                "Chiudi", id="close_download", className="ms-auto", n_clicks=0
+                "Chiudi", id="close_download", n_clicks=0, 
                 )
         ),
     ],
