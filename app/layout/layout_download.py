@@ -28,9 +28,10 @@ modal_data_download = dbc.Modal(
                         ),
                         label='Seleziona indicatori', 
                     )
-                ]),
+                ], xs=12),
                 
                 dbc.Col([
+                    html.Br(),
                     dbc.DropdownMenu(
                         dbc.Checklist(
                             id='download_territory',
@@ -39,7 +40,7 @@ modal_data_download = dbc.Modal(
                         ),
                         label='Seleziona territori', 
                     )
-                ])]),
+                ], xs=12)]),
                 html.Br(),
                 dbc.Button('Download', id='download_button', n_clicks=0,),
                 dcc.Download(id='download_file')
