@@ -26,8 +26,7 @@ def display_map_home():
                     'Generale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
         zoom=4.5, opacity=1, center=dict(lat=42, lon=12)
     )
-    fig.update_layout(legend=dict(xanchor='right', yanchor='top', x=0.95, y=0.95))
-    #fig.update_layout(coloraxis_colorbar=dict(title="Livello", x=0.92))
+    fig.update_layout(legend=dict(title_text="Livelli d'inclusione/esclusione",xanchor='right', yanchor='top', x=0.95, y=0.95))
     fig.update_layout(
         mapbox_style = MAP_STYLE,
         mapbox_accesstoken = MAP_TOKEN,

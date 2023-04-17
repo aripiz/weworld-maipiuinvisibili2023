@@ -22,8 +22,8 @@ tab_map_features = html.Div([
                     id = 'feature',
                     options = features_list,
                     value = features_list[0],
-                    #style = {"width": "80%"}
-                )], lg = 6, xs = 12),
+                    style = {"width": "75%"}
+                )], lg = 9, xs = 12),
                 dbc.Col([
                     dbc.Label("Seleziona un anno:"),
                     dcc.Slider(
@@ -39,9 +39,24 @@ tab_map_features = html.Div([
                 dbc.Row(dbc.Col(
                 dcc.Graph(
                     id = "map",
-                    #style = {'height': '100%'},
-                    responsive = True
-                )), justify = 'around', class_name = 'mt-2')
+                    style = {'height': '60vh'},
+                )), justify = 'around', class_name = 'mt-2'),
+                dbc.Row(
+                    dbc.Col([
+                        dbc.Button(
+                            "Informazioni",
+                            id="collapse-button",
+                            className="mb-3",
+                            color="primary",
+                            n_clicks=0,
+                        ),
+                        dbc.Collapse(
+                        dbc.Card("This content is hidden in the collapse", body=True),
+                        id="collapse",
+                        is_open=False,
+                        ),
+                    ]),  justify = 'around', class_name = 'mt-4'
+                )
             ])
 
 tab_map_indicators = html.Div([
@@ -111,7 +126,7 @@ tab_correlations = html.Div([
                         value=years_list[-1],
                         marks={str(year): str(year) for year in years_list})
                     ], lg = 3, xs =12)],
-                justify='around'),
+                justify='between'),
                 dbc.Row(dbc.Col(dcc.Graph(
                     id="dimensions_correlation",
                     #style={'height': '100%'},
@@ -127,8 +142,8 @@ tab_ranking = html.Div([
                     id="ranking_feature",
                     options = features_list,
                     value=features_list[0],
-                    #style={"width": "75%"}
-                )], lg = 6, xs =12),
+                    style={"width": "75%"}
+                )], lg = 9, xs =12),
                 dbc.Col([
                 dbc.Label("Seleziona un anno:"),
                 dcc.Slider(
@@ -183,9 +198,9 @@ tab_radar = html.Div([
                     id='radar_territory',
                     options = territories_list ,
                     value = 'Italia',
-                    #style={"width": "75%"},
+                    style={"width": "75%"},
                     multi=True
-                )], lg = 6, xs =12),
+                )], lg = 9, xs =12),
                 dbc.Col([
                 dbc.Label("Seleziona gli anni:"),
                 dcc.Dropdown(
