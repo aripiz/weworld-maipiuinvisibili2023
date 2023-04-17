@@ -8,7 +8,7 @@ from layout.callbacks import render_data
 from layout.callbacks import render_tab
 from layout.callbacks import toggle_modal
 
-from index import NOTES_FILE, REPORT_FILE
+from index import NOTES_FILE, REPORT_FILE, TITLE
 
 from layout.layout_download import modal_data_download
 
@@ -28,8 +28,8 @@ footer = dbc.Row([
             #style={"position": "absolute", "bottom": "0", 'left':"0", "right":"0", "width": "100%", "height": "2.5rem","text-align":"center"}
 
 # Sections
-pages_nav = dbc.Nav(
-    [
+pages_nav = dbc.NavbarSimple(
+    children=[
         dbc.NavItem(dbc.NavLink("Panoramica", active='exact', href='/')),
         dbc.NavItem(dbc.NavLink("Esplora i dati", active='exact', href="/data")),
         dbc.NavItem(dbc.NavLink("Metodologia", active='exact', href="/methodology")),
@@ -44,11 +44,16 @@ pages_nav = dbc.Nav(
             nav=True,
         ),
     ],
-    pills=True, 
-    horizontal='center'
+    #pills=True, 
+    #horizontal='center'
+    brand=TITLE,
+    brand_href="#",
+    color="primary",
+    dark=True,
+    fixed='top',
 )
 
-page = dbc.Row(dbc.Col(page_container), className="my-4", style={"display": "flex", "flex-direction": "column",'justify-content': 'around'})
+page = dbc.Row(dbc.Col(page_container), style={"display": "flex", "flex-direction": "column",'justify-content': 'around', 'padding-top': '50px'})
 
 # Main layout
 app.layout = dbc.Container(

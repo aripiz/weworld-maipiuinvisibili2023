@@ -10,8 +10,8 @@ register_page(__name__, path='/', name=TITLE)
 from layout.layout_home import display_map_home
 
 layout = html.Div([
-        dbc.Row(dbc.Col(dcc.Markdown("## L’Indice _Mai più invisibili_"))),
-        html.Br(),
+        #dbc.Row(dbc.Col(dcc.Markdown("## L’Indice _Mai più invisibili_"))),
+        #html.Br(),
         dbc.Row([
             dbc.Col([
                 #dcc.Markdown("### Il diritto all'inclusione"),
