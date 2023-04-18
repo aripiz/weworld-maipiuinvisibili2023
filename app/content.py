@@ -21,7 +21,7 @@ header = dbc.Row(
 footer2 = dbc.Navbar([
     html.Div("WeWorld"),
     html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')])],
-    style={"display": "flex", 'justify-content': 'space-between', 'margin':'auto !important', 'flex':'1'},
+    style={"display": "flex", 'justify-content': 'space-between', 'padding-left':'4rem', 'padding-right':'4rem', 'flex':'1', },
     #color="primary",
     fixed='bottom',
                 #"padding-top": "1rem", "padding-bottom": "1rem"

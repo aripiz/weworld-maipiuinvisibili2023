@@ -51,7 +51,7 @@ tab_map_features = html.Div([
                             n_clicks=0,
                         ),
                         dbc.Collapse(
-                        dbc.Card("This content is hidden in the collapse", body=True),
+                        dbc.Card("La mappa mostra", body=True),
                         id="collapse",
                         is_open=False,
                         ),
@@ -80,7 +80,7 @@ tab_map_indicators = html.Div([
                     lg = 3, xs = 12
                 ),
                 dbc.Col([
-                    html.P("Seleziona un anno:"),
+                    dbc.Label("Seleziona un anno:"),
                     dcc.Slider(
                         years_list[0],
                         years_list[-1],
@@ -93,9 +93,24 @@ tab_map_indicators = html.Div([
                 dbc.Row(dbc.Col(
                 dcc.Graph(
                     id="indicators_map",
-                    #style={'height': '100%'},
-                    responsive=True
-                )), justify = 'around', class_name = 'mt-2')
+                    style = {'height': '60vh'},
+                )), justify = 'around', class_name = 'mt-2'),
+                dbc.Row(
+                    dbc.Col([
+                        dbc.Button(
+                            "Informazioni",
+                            id="collapse-button",
+                            className="mb-3",
+                            color="primary",
+                            n_clicks=0,
+                        ),
+                        dbc.Collapse(
+                        dbc.Card("This content is hidden in the collapse", body=True),
+                        id="collapse",
+                        is_open=False,
+                        ),
+                    ]),  justify = 'around', class_name = 'mt-4'
+                )
             ])
 
 tab_correlations = html.Div([
@@ -129,9 +144,24 @@ tab_correlations = html.Div([
                 justify='between'),
                 dbc.Row(dbc.Col(dcc.Graph(
                     id="dimensions_correlation",
-                    #style={'height': '100%'},
-                    responsive=True
+                    style={'height': '60vh'},
                 )), justify = 'around', class_name = 'mt-2'),
+                dbc.Row(
+                    dbc.Col([
+                        dbc.Button(
+                            "Informazioni",
+                            id="collapse-button",
+                            className="mb-3",
+                            color="primary",
+                            n_clicks=0,
+                        ),
+                        dbc.Collapse(
+                        dbc.Card("This content is hidden in the collapse", body=True),
+                        id="collapse",
+                        is_open=False,
+                        ),
+                    ]),  justify = 'around', class_name = 'mt-4'
+                )
             ])
 
 tab_ranking = html.Div([
@@ -185,9 +215,24 @@ tab_evolution = html.Div([
                 dbc.Row(dbc.Col(
                 dcc.Graph(
                     id="evolution_plot",
-                    #style={'height': '100%'},
-                    responsive=True
-                )), justify = 'around', class_name = 'mt-2')
+                    style={'height': '60vh'},
+                )), justify = 'around', class_name = 'mt-2'),
+                dbc.Row(
+                    dbc.Col([
+                        dbc.Button(
+                            "Informazioni",
+                            id="collapse-button",
+                            className="mb-3",
+                            color="primary",
+                            n_clicks=0,
+                        ),
+                        dbc.Collapse(
+                        dbc.Card("This content is hidden in the collapse", body=True),
+                        id="collapse",
+                        is_open=False,
+                        ),
+                    ]),  justify = 'around', class_name = 'mt-4'
+                )
             ])
 
 tab_radar = html.Div([
@@ -218,10 +263,25 @@ tab_radar = html.Div([
                 ), lg = 6, xs =12),
                 dbc.Col(dcc.Graph(
                     id="radar_chart",
-                    #style={'height': '100%'},
-                    responsive=True
+                    style={'height': '60vh'},
                 ), lg = 6, xs =12)
-                ], justify = 'around', class_name = 'mt-2')
+                ], justify = 'around', class_name = 'mt-2'),
+                dbc.Row(
+                    dbc.Col([
+                        dbc.Button(
+                            "Informazioni",
+                            id="collapse-button",
+                            className="mb-3",
+                            color="primary",
+                            n_clicks=0,
+                        ),
+                        dbc.Collapse(
+                        dbc.Card("This content is hidden in the collapse", body=True),
+                        id="collapse",
+                        is_open=False,
+                        ),
+                    ]),  justify = 'around', class_name = 'mt-4'
+                )
             ])
 
 # Methodology tabs

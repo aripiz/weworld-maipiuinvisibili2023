@@ -184,9 +184,9 @@ def display_radar(territories, year):
     Input("radar_territory", "value"),
     Input("radar_year", "value"))
 def display_radar_table(territories, year):
-    features = df_data.columns[8:23]
+    features = df_data.columns[8:23].to_list()
     df = df_data.query("territorio == @territories and anno==@year").rename(columns={'anno':'Anno', 'territorio':'Territorio'})
-    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Dimensione', value_name='Punteggio').set_index(['Dimensione', 'Territorio', 'Anno']).unstack(['Territorio','Anno'])
+    df = pd.melt(df, id_vars=['Territorio', 'Anno'], value_vars=features, var_name='Dimensione', value_name='Punteggio').set_index(['Dimensione', 'Territorio', 'Anno']).unstack(['Territorio','Anno']).loc[features]
     table = dbc.Table.from_dataframe(
                     df,
                     bordered=False,
