@@ -10,7 +10,7 @@ register_page(__name__, path='/', name=TITLE)
 from layout.layout_home import display_map_home
 
 layout = html.Div([
-
+        html.Br(),
         dbc.Row([
             dbc.Col([
                 #dcc.Markdown("### Il diritto all'inclusione"),
