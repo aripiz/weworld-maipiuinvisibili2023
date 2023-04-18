@@ -15,6 +15,22 @@ territories_list = df_data['territorio'].unique()
 
 # Data tabs
 tab_map_features = html.Div([
+            dbc.Row(
+                    dbc.Col([
+                        dbc.Button(
+                            "Informazioni",
+                            id="collapse-button",
+                            className="mb-3",
+                            color="primary",
+                            n_clicks=0,
+                        ),
+                        dbc.Collapse(
+                        dbc.Card("La mappa mostra il punteggio delle componenti dell'Indice. Dai menu è possibile selezionare la componente (Indice/Sottoindice/Dimensione) e l'anno di cui mostrare i risultati. Ciascun territorio è colorato in base al livello di inclusione/esclusione a cui appartiene nella componente scelta. Gli intervalli di punteggio che definiscono i livelli sono riportati nelle Note tecniche.", body=True),
+                        id="collapse",
+                        is_open=False,
+                        ),
+                    ]),  justify = 'around', class_name = 'my-2'
+                ),
                 dbc.Row([
                 dbc.Col([
                     dbc.Label("Seleziona una componente:"),
@@ -41,6 +57,9 @@ tab_map_features = html.Div([
                     id = "map",
                     style = {'height': '60vh'},
                 )), justify = 'around', class_name = 'mt-2'),
+            ])
+
+tab_map_indicators = html.Div([
                 dbc.Row(
                     dbc.Col([
                         dbc.Button(
@@ -51,15 +70,12 @@ tab_map_features = html.Div([
                             n_clicks=0,
                         ),
                         dbc.Collapse(
-                        dbc.Card("La mappa mostra", body=True),
+                        dbc.Card("La mappa mostra i dati degli Indicatori che fanno parte dell'Indice. Dai menu è possibile selezionare l'Indicatore da mostrare, il tipo di valore da riportare (dato originale o punteggio normalizzato) e l'anno di riferimento. Selezionando i dati originali, la mappa rimarrà bianca in corrispondenza di valori mancanti.", body=True),
                         id="collapse",
                         is_open=False,
                         ),
-                    ]),  justify = 'around', class_name = 'mt-4'
-                )
-            ])
-
-tab_map_indicators = html.Div([
+                    ]),  justify = 'around', class_name = 'my-2'
+                ),
                 dbc.Row([
                 dbc.Col([
                     dbc.Label("Seleziona un indicatore:"),
@@ -95,6 +111,9 @@ tab_map_indicators = html.Div([
                     id="indicators_map",
                     style = {'height': '60vh'},
                 )), justify = 'around', class_name = 'mt-2'),
+            ])
+
+tab_correlations = html.Div([
                 dbc.Row(
                     dbc.Col([
                         dbc.Button(
@@ -105,15 +124,12 @@ tab_map_indicators = html.Div([
                             n_clicks=0,
                         ),
                         dbc.Collapse(
-                        dbc.Card("This content is hidden in the collapse", body=True),
+                        dbc.Card("Il grafico mostra la correlazione fra le componenti dell'Indice: ciascun punto nel grafico avrà coordinate x e y date dal punteggio del territorio nelle componenti scelte. Dai menu è possibile selezionare le due componenti (Indice/Sottoindice/Dimensione) da confrontare nel grafico. I territori sono colorati in base all'area geografica di appartenenza.", body=True),
                         id="collapse",
                         is_open=False,
                         ),
-                    ]),  justify = 'around', class_name = 'mt-4'
-                )
-            ])
-
-tab_correlations = html.Div([
+                    ]),  justify = 'around', class_name = 'my-2'
+                ),
                 dbc.Row([
                 dbc.Col([
                     dbc.Label("Seleziona una componente:"),
@@ -146,6 +162,9 @@ tab_correlations = html.Div([
                     id="dimensions_correlation",
                     style={'height': '60vh'},
                 )), justify = 'around', class_name = 'mt-2'),
+            ])
+
+tab_ranking = html.Div([
                 dbc.Row(
                     dbc.Col([
                         dbc.Button(
@@ -156,15 +175,12 @@ tab_correlations = html.Div([
                             n_clicks=0,
                         ),
                         dbc.Collapse(
-                        dbc.Card("This content is hidden in the collapse", body=True),
+                        dbc.Card("La tabella riporta la classifica dei territori nella componente (Indice/Sottoindice/Dimensione) e nell'anno selezionato.", body=True),
                         id="collapse",
                         is_open=False,
                         ),
-                    ]),  justify = 'around', class_name = 'mt-4'
-                )
-            ])
-
-tab_ranking = html.Div([
+                    ]),  justify = 'around', class_name = 'my-2'
+                ),
                 dbc.Row([
                 dbc.Col([
                 dbc.Label("Seleziona una componente:"),
@@ -192,6 +208,22 @@ tab_ranking = html.Div([
             ])
 
 tab_evolution = html.Div([
+                dbc.Row(
+                    dbc.Col([
+                        dbc.Button(
+                            "Informazioni",
+                            id="collapse-button",
+                            className="mb-3",
+                            color="primary",
+                            n_clicks=0,
+                        ),
+                        dbc.Collapse(
+                        dbc.Card("Il grafico mostra l'evoluzione temporale delle componenti dell'Indice. Dai menu è possibile selezionare una o più componenti (Indice/Sottoindice/Dimensione) e uno o più territori (Regione/Provincia Autonoma/Area/Italia) per confrontarne l'evoluzione.", body=True),
+                        id="collapse",
+                        is_open=False,
+                        ),
+                    ]),  justify = 'around', class_name = 'my-2'
+                ),
                 dbc.Row([
                 dbc.Col([
                 dbc.Label("Seleziona le componenti:"),
@@ -217,6 +249,9 @@ tab_evolution = html.Div([
                     id="evolution_plot",
                     style={'height': '60vh'},
                 )), justify = 'around', class_name = 'mt-2'),
+            ])
+
+tab_radar = html.Div([
                 dbc.Row(
                     dbc.Col([
                         dbc.Button(
@@ -227,15 +262,12 @@ tab_evolution = html.Div([
                             n_clicks=0,
                         ),
                         dbc.Collapse(
-                        dbc.Card("This content is hidden in the collapse", body=True),
+                        dbc.Card("Il grafico radar mostra i punteggi delle Dimensioni del territorio. Dai menu è possibile selezionare i territori (Regione/Provincia Autonoma/Area/Italia) e gli anni da mostrare. La tabella a fianco riporta i dati mostrati nel grafico.", body=True),
                         id="collapse",
                         is_open=False,
                         ),
-                    ]),  justify = 'around', class_name = 'mt-4'
-                )
-            ])
-
-tab_radar = html.Div([
+                    ]),  justify = 'around', class_name = 'my-2'
+                ),
                 dbc.Row([
                 dbc.Col([
                 dbc.Label("Seleziona i territori:"),
@@ -266,22 +298,6 @@ tab_radar = html.Div([
                     style={'height': '60vh'},
                 ), lg = 6, xs =12)
                 ], justify = 'around', class_name = 'mt-2'),
-                dbc.Row(
-                    dbc.Col([
-                        dbc.Button(
-                            "Informazioni",
-                            id="collapse-button",
-                            className="mb-3",
-                            color="primary",
-                            n_clicks=0,
-                        ),
-                        dbc.Collapse(
-                        dbc.Card("This content is hidden in the collapse", body=True),
-                        id="collapse",
-                        is_open=False,
-                        ),
-                    ]),  justify = 'around', class_name = 'mt-4'
-                )
             ])
 
 # Methodology tabs
@@ -357,13 +373,6 @@ tab_indicators= html.Div([
             ]), style={'height':"100%"}),
             lg=9, xs=12,
         ),
-        # dbc.Col(
-        #     dbc.Card(dbc.CardBody([
-        #         html.H4("Link", className="card-title"),
-        #         html.A("Dati originali", , className="card-text")
-        #     ])),
-        #     lg=3, xs=6,
-        # ),
     ], class_name = 'mt-2'),
 ])
 
@@ -396,30 +405,42 @@ tab_construction = html.Div([
         ], lg=6, xs =12),
         dbc.Col(
             dbc.CardGroup([
-                dbc.Card(
+                dbc.Card([
+                    dbc.CardImg(
+                        src="/assets/icona-contesto.png",
+                        top=True,
+                    ),
                     dbc.CardBody([
                         html.H4("Contesto", className="card-title"),
                         dbc.ListGroup([ dbc.ListGroupItem(dim) for dim in df_meta.loc[[1,3,5,7,9],'dimensione']],
                         numbered=False, flush=True,
-                        className="card-text",)
+                        className="card-text", )
                         ])
-                ),
-                dbc.Card(
+                ]),
+                dbc.Card([
+                    dbc.CardImg(
+                        src="/assets/icona-bambini.png",
+                        top=True,
+                    ),
                     dbc.CardBody([
                         html.H4("Bambini", className="card-title"),
                         dbc.ListGroup([ dbc.ListGroupItem(dim) for dim in df_meta.loc[[11,13,15,17,19],'dimensione']],
                         numbered=False, flush=True,
                         className="card-text",)
                         ])
-                ),
-                dbc.Card(
+                ]),
+                dbc.Card([
+                    dbc.CardImg(
+                        src="/assets/icona-donne.png",
+                        top=True,
+                    ),
                     dbc.CardBody([
                         html.H4("Donne", className="card-title"),
                         dbc.ListGroup([ dbc.ListGroupItem(dim) for dim in df_meta.loc[[21,23,25,27,29],'dimensione']],
                         numbered=False, flush=True,
                         className="card-text",)
                     ])
-                )
+                ])
             ]),
         align='center', lg= 6, xs =12)
     ], justify="around"),

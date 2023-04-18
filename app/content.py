@@ -18,8 +18,8 @@ header = dbc.Row(
             dbc.Col(dcc.Markdown("# WeWorld _Mai più invisibili 2023_"), style={'text-align':'center'})
 )
 
-footer2 = dbc.Navbar([
-    html.Div("WeWorld"),
+footer = dbc.Navbar([
+    html.Div("WeWorld"), #html.Img(src="assets/logo_weworld.png", height='15px'),#
     html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')])],
     style={"display": "flex", 'justify-content': 'space-between', 'padding-left':'4rem', 'padding-right':'4rem', 'flex':'1', },
     #color="primary",
@@ -28,7 +28,7 @@ footer2 = dbc.Navbar([
 )      
             #style={"position": "absolute", "bottom": "0", 'left':"0", "right":"0", "width": "100%", "height": "2.5rem","text-align":"center"}
 
-footer = dbc.Row([
+footer_old = dbc.Row([
     dbc.Col(html.Div("WeWorld Onlus"), style={'text-align':'left'} ),
     dbc.Col(html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')]), style={'text-align':'right'})],   
     justify='around',
@@ -55,9 +55,7 @@ pages_nav = dbc.NavbarSimple(
             nav=True,
         ),
     ],
-    #pills=True, 
-    #horizontal='center'
-    brand=TITLE,
+    brand= [html.Img(src="assets/logo_weworld.png", height='30px'), html.Img(src="assets/logo_maipiuinvisibili2023_neg.png", height="30px")], # TITLE,
     brand_href="https://www.weworld.it",
     fixed='top',
     color='primary',
@@ -72,7 +70,7 @@ app.layout = dbc.Container(
         #header,
         pages_nav,
         page,
-        footer2
+        footer
     ],
     #fluid=True,
     className="dbc",     
