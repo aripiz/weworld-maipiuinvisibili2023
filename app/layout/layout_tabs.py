@@ -301,28 +301,28 @@ tab_indicators= html.Div([
             dbc.Card(dbc.CardBody([
                 html.H4("Indicatore", className="card-title"),
                 html.H5(id="indicator_num", className="card-text")
-            ])),
+            ]), style={'height':"100%"}),
             lg = 2, xs = 4,
         ),
         dbc.Col(
             dbc.Card(dbc.CardBody([
                 html.H4("Nome", className="card-title"),
                 html.Div(id="indicator_name", className="card-text")
-            ])),
+            ]), style={'height':"100%"}),
             lg=6, xs=8,
         ),
         dbc.Col(
             dbc.Card(dbc.CardBody([
                 html.H4("Sottoindice", className="card-title"),
                 html.Div(id="indicator_sub", className="card-text")
-            ])),
+            ]), style={'height':"100%"}),
             lg=2, xs=6,
         ),
         dbc.Col(
             dbc.Card(dbc.CardBody([
                 html.H4("Dimensione", className="card-title"),
                 html.Div(id="indicator_dim", className="card-text")
-            ])),
+            ]), style={'height':"100%"}),
             lg=2, xs=6,
         ),
     ], class_name = 'mt-2'),
@@ -331,14 +331,14 @@ tab_indicators= html.Div([
             dbc.Card(dbc.CardBody([
                 html.H4("Descrizione", className="card-title"),
                 html.Div(id="indicator_des", className="card-text")
-            ])),
+            ]), style={'height':"100%"}),
             lg=10, xs=12,
         ),
         dbc.Col(
             dbc.Card(dbc.CardBody([
                 html.H4("Unità di misura", className="card-title"),
                 html.Div(id="indicator_unit", className="card-text")
-            ])),
+            ]), style={'height':"100%"}),
             lg=2, xs=12,
         ),
     ], class_name = 'mt-2'),
@@ -347,14 +347,14 @@ tab_indicators= html.Div([
             dbc.Card(dbc.CardBody([
                 html.H4("Aggiornamento", className="card-title"),
                 html.Div(id="indicator_update", className="card-text")
-            ])),
+            ]), style={'height':"100%"}),
             lg = 3, xs = 12,
         ),
         dbc.Col(
             dbc.Card(dbc.CardBody([
                 html.H4("Fonte", className="card-title"),
                 html.A(id="indicator_source", className="card-text", target="_blank", rel="noopener noreferrer")
-            ])),
+            ]), style={'height':"100%"}),
             lg=9, xs=12,
         ),
         # dbc.Col(
