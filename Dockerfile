@@ -1,4 +1,5 @@
-FROM python:3.9-slim
+FROM python:debian11-slim
+#FROM python:3.9-slim
 
 #set envionment variables
 ENV PYTHONUNBUFFERED 1
