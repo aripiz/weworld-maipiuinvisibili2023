@@ -1,5 +1,6 @@
 # toggle_modal.py
 
+from fileinput import filename
 from index import app
 from index import df_data, df_meta
 
@@ -32,18 +33,19 @@ def download_excel(n_clicks, indicators, territories):
 
         meta = df_meta[colonne_metadati]  
         data = df_data.set_index(['territorio','anno'])[colonne_dati]
-        if indicators  != None: 
+        file_name = "WeWorld-MaiPiùInvisibili-2023_Indicatori.xlsx"
+        if indicators  is not None: 
             indicators = [int(indicator.split(":")[0]) for indicator in indicators]
             colonne_dati = [f'Indicatore {indicator}' for indicator in indicators]
             meta = meta.loc[indicators]
             data = data[colonne_dati]
-        if territories != None:
+            file_name = "WeWorld-MaiPiùInvisibili-2023_Indicatori-selezione.xlsx"
+        if territories is not None:
             data = data.loc[territories]
-        file_name = "WeWorld-MaiPiùInvisibili-2023_Indicatori.xlsx"
+            file_name = "WeWorld-MaiPiùInvisibili-2023_Indicatori-selezione.xlsx"
         buffer = io.BytesIO()
         with pd.ExcelWriter(buffer) as writer:
             meta.to_excel(writer, sheet_name='metadati')
             data.to_excel(writer, sheet_name='dati')
         return dcc.send_bytes(buffer.getvalue(), filename=file_name)
     else: return None
-

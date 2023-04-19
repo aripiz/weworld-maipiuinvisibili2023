@@ -1,4 +1,5 @@
 pandas==1.5
+xlsxwriter
 plotly>=5.10
 dash>=2.9
 dash-bootstrap-components>=1.4

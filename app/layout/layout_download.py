@@ -42,7 +42,7 @@ modal_data_download = dbc.Modal(
                     )
                 ], xs=12)),
                 html.Br(),
-                dbc.Button('Download', id='download_button', n_clicks=0,),
+                dbc.Button('Download', id='download_button', n_clicks=0),
                 dcc.Download(id='download_file')
             ],
             style={'text-align':'center'})
