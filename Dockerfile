@@ -1,4 +1,4 @@
-FROM debian:11-slim
+FROM debian:11
 #FROM python:3.9-slim
 
 #set envionment variables
