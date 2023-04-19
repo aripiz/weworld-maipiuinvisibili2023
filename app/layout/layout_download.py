@@ -17,8 +17,8 @@ modal_data_download = dbc.Modal(
         dbc.ModalHeader(dbc.ModalTitle("Scarica i dati dell'Indice"), close_button=False),
         dbc.ModalBody(
             html.Div([
-                html.P('Scarica tutti i dati oppure seleziona quali scaricare:'),
-                dbc.Row([
+                dbc.Label('Scarica tutti i dati oppure seleziona quali scaricare:'),
+                dbc.Row(
                 dbc.Col([
                     dbc.DropdownMenu(
                         dbc.Checklist(
@@ -28,8 +28,8 @@ modal_data_download = dbc.Modal(
                         ),
                         label='Seleziona indicatori', 
                     )
-                ], xs=12),
-                
+                ], xs=12)),
+                dbc.Row(
                 dbc.Col([
                     html.Br(),
                     dbc.DropdownMenu(
@@ -40,7 +40,7 @@ modal_data_download = dbc.Modal(
                         ),
                         label='Seleziona territori', 
                     )
-                ], xs=12)]),
+                ], xs=12)),
                 html.Br(),
                 dbc.Button('Download', id='download_button', n_clicks=0,),
                 dcc.Download(id='download_file')

@@ -3,4 +3,5 @@ plotly>=5.10
 dash>=2.9
 dash-bootstrap-components>=1.4
 dash-bootstrap-templates>=1.0
+io
 gunicorn

@@ -52,7 +52,7 @@ pages_nav = dbc.NavbarSimple(
                 modal_data_download
             ],
             label="Download",
-            nav=True,
+            in_navbar=True,
         ),
     ],
     brand= [html.Img(src="assets/logo_weworld.png", height='30px'), html.Img(src="assets/logo_maipiuinvisibili2023_neg.png", height="30px")], # TITLE,
