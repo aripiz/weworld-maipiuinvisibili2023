@@ -10,7 +10,7 @@ from dash import Input, Output
 
 from index import app
 from index import df_meta, df_data
-from index import MAP_STYLE, MAP_TOKEN, GEO_FILE, FIGURE_TEMPLATE, COLOR_SCALE
+from configuration import MAP_STYLE, MAP_TOKEN, GEO_FILE, FIGURE_TEMPLATE, COLOR_SCALE
 from utilis import sig_round
 
 load_figure_template(FIGURE_TEMPLATE)

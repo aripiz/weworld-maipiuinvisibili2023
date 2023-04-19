@@ -4,7 +4,7 @@ from index import df_data, df_meta
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 
-from index import NOTES_FILE
+from configuration import NOTES_FILE
 
 # Options
 features_list = df_data.columns[4:23]

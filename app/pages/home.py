@@ -2,8 +2,7 @@
 
 from dash import html, dcc, register_page
 import dash_bootstrap_components as dbc
-from numpy import False_
-from index import TITLE
+from configuration import TITLE
 
 register_page(__name__, path='/', name=TITLE)
 

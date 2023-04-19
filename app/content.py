@@ -9,7 +9,7 @@ from layout.callbacks import render_tab
 from layout.callbacks import toggle_modal
 from layout.callbacks import toggle_collapse
 
-from index import NOTES_FILE, REPORT_FILE, TITLE
+from configuration import NOTES_FILE, REPORT_FILE
 
 from layout.layout_download import modal_data_download
 
