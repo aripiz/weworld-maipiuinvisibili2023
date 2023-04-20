@@ -63,7 +63,7 @@ footer_old = dbc.Row([
             #style={"position": "absolute", "bottom": "0", 'left':"0", "right":"0", "width": "100%", "height": "2.5rem","text-align":"center"}
 
 # Page
-page = dbc.Row(dbc.Col([page_container, html.Br()]), style={ 'padding-top': '80px', 'padding-bottom': '60px'}) #"display": "flex", "flex-direction": "column",'justify-content': 'around',
+page = dbc.Row(dbc.Col([page_container, html.Br()]), style={ 'padding-top': '80px', 'padding-bottom': '60px'}) 
 
 # Main layout
 app.layout = dbc.Container(
