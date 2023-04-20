@@ -6,7 +6,7 @@ import pandas as pd
 
 from configuration import DATA_FILE, META_FILE, TITLE, DBC_CSS
 
-# Loading
+# Loading data
 df_data = pd.read_csv(DATA_FILE)
 df_meta = pd.read_csv(META_FILE, index_col=0)
 
