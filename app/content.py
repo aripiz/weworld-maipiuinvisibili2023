@@ -13,30 +13,7 @@ from configuration import NOTES_FILE, REPORT_FILE
 
 from layout.layout_download import modal_data_download
 
-# Header and footer
-header = dbc.Row(
-            dbc.Col(dcc.Markdown("# WeWorld _Mai più invisibili 2023_"), style={'text-align':'center'})
-)
-
-footer = dbc.Navbar([
-    html.Div("WeWorld"), 
-    html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')])],
-    style={"display": "flex", 'justify-content': 'space-between', 'padding-left':'4rem', 'padding-right':'4rem', 'flex':'1', },
-    #color="primary",
-    fixed='bottom',
-)      
-           
-footer_old = dbc.Row([
-    dbc.Col(html.Div("WeWorld Onlus"), style={'text-align':'left'} ),
-    dbc.Col(html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')]), style={'text-align':'right'})],   
-    justify='around',
-    class_name='fixed-bottom',
-    style={'background-color': '#005D9E', 'color':'white', "margin-top":"auto", 'padding-left':'1.5rem', 'padding-right':'1.5rem' }
-                #"padding-top": "1rem", "padding-bottom": "1rem"
-)      
-            #style={"position": "absolute", "bottom": "0", 'left':"0", "right":"0", "width": "100%", "height": "2.5rem","text-align":"center"}
-
-# Sections
+# Navbar
 pages_nav = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("Panoramica", active='exact', href='/')),
@@ -53,14 +30,40 @@ pages_nav = dbc.NavbarSimple(
             in_navbar=True,
         ),
     ],
-    brand= [html.Img(src="assets/logo_weworld.png", height='30px'), html.Img(src="assets/logo_maipiuinvisibili2023_neg.png", height="30px")], # TITLE,
+    brand= [html.Img(src="assets/logo_weworld_neg.png", height='30px'), html.Img(src="assets/logo_maipiuinvisibili2023_neg.png", height="30px")],
     brand_href="https://www.weworld.it",
     fixed='top',
     color='primary',
     dark=True
 )
 
-page = dbc.Row(dbc.Col(page_container), style={ 'padding-top': '80px', 'padding-bottom': '60px'}) #"display": "flex", "flex-direction": "column",'justify-content': 'around',
+header_old = dbc.Row(
+            dbc.Col(dcc.Markdown("# WeWorld _Mai più invisibili 2023_"), style={'text-align':'center'})
+)
+
+# Footer
+footer = dbc.Navbar(
+    dbc.Container([
+        html.Div("© 2023 WeWorld", style={'font-size':'x-small'}), 
+        html.Div(["credits: ", html.A("aripiz", href="https://github.com/aripiz",className='link-warning')], style={'font-size':'x-small'})
+    ]),
+    style={"display": "flex", 'justify-content': 'space-between', 'flex':'1', },
+    #color="primary",
+    fixed='bottom',
+)      
+           
+footer_old = dbc.Row([
+    dbc.Col(html.Div("WeWorld Onlus"), style={'text-align':'left'} ),
+    dbc.Col(html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')]), style={'text-align':'right'})],   
+    justify='around',
+    class_name='fixed-bottom',
+    style={'background-color': '#005D9E', 'color':'white', "margin-top":"auto", 'padding-left':'1.5rem', 'padding-right':'1.5rem' }
+                #"padding-top": "1rem", "padding-bottom": "1rem"
+)      
+            #style={"position": "absolute", "bottom": "0", 'left':"0", "right":"0", "width": "100%", "height": "2.5rem","text-align":"center"}
+
+# Page
+page = dbc.Row(dbc.Col([page_container, html.Br()]), style={ 'padding-top': '80px', 'padding-bottom': '60px'}) #"display": "flex", "flex-direction": "column",'justify-content': 'around',
 
 # Main layout
 app.layout = dbc.Container(
@@ -71,4 +74,5 @@ app.layout = dbc.Container(
     ],
     #fluid=True,
     className="dbc",     
+    style={"display": "flex", "flex-direction": "column"}
 )

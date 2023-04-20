@@ -407,37 +407,34 @@ tab_construction = html.Div([
             dbc.CardGroup([
                 dbc.Card([
                     dbc.CardImg(
-                        src="/assets/icona-contesto.png",
+                        src="assets/icona-contesto.png",
                         top=True,
                     ),
                     dbc.CardBody([
                         html.H4("Contesto", className="card-title"),
-                        dbc.ListGroup([ dbc.ListGroupItem(dim) for dim in df_meta.loc[[1,3,5,7,9],'dimensione']],
-                        numbered=False, flush=True,
-                        className="card-text", )
+                        html.Div([html.P(dim) for dim in df_meta.loc[[1,3,5,7,9],'dimensione']],
+                        className="card-text",), 
                         ])
                 ]),
                 dbc.Card([
                     dbc.CardImg(
-                        src="/assets/icona-bambini.png",
+                        src="assets/icona-bambini.png",
                         top=True,
                     ),
                     dbc.CardBody([
                         html.H4("Bambini", className="card-title"),
-                        dbc.ListGroup([ dbc.ListGroupItem(dim) for dim in df_meta.loc[[11,13,15,17,19],'dimensione']],
-                        numbered=False, flush=True,
+                        html.Div([ html.P(dim) for dim in df_meta.loc[[11,13,15,17,19],'dimensione']],
                         className="card-text",)
                         ])
                 ]),
                 dbc.Card([
                     dbc.CardImg(
-                        src="/assets/icona-donne.png",
+                        src="assets/icona-donne.png",
                         top=True,
                     ),
                     dbc.CardBody([
                         html.H4("Donne", className="card-title"),
-                        dbc.ListGroup([ dbc.ListGroupItem(dim) for dim in df_meta.loc[[21,23,25,27,29],'dimensione']],
-                        numbered=False, flush=True,
+                        html.Div([ html.P(dim) for dim in df_meta.loc[[21,23,25,27,29],'dimensione']],
                         className="card-text",)
                     ])
                 ])
