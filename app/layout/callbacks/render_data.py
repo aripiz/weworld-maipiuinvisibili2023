@@ -40,7 +40,6 @@ def display_map_index(feature, year):
         hover_name='territorio',
         hover_data={'codice_istat':False, 'anno': False,
                     feature: ':.3g'},
-                    #'Generale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
         zoom=ZOOM_LEVEL, opacity=1, center=dict(lat=42, lon=12)
     )
     fig.update_layout(legend=dict(title_text="Livelli d'inclusione/esclusione",xanchor='right', yanchor='top', x=0.95, y=0.92))
@@ -109,7 +108,6 @@ def display_corr_dimensions(dimension_x, dimension_y,year):
     fig = px.scatter(df, x=dimension_x, y=dimension_y,
                  hover_name='territorio', color='area',
                  hover_data={'area':False, 'anno': False, dimension_x: ':.3g', dimension_y:':.3g'},
-                 #range_x=[20,90], range_y=[20,90]
                  )
     fig.update_traces(marker={'size': 15})
     fig.update_layout(legend_title = 'Area')

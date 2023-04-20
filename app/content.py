@@ -19,15 +19,13 @@ header = dbc.Row(
 )
 
 footer = dbc.Navbar([
-    html.Div("WeWorld"), #html.Img(src="assets/logo_weworld.png", height='15px'),#
+    html.Div("WeWorld"), 
     html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')])],
     style={"display": "flex", 'justify-content': 'space-between', 'padding-left':'4rem', 'padding-right':'4rem', 'flex':'1', },
     #color="primary",
     fixed='bottom',
-                #"padding-top": "1rem", "padding-bottom": "1rem"
 )      
-            #style={"position": "absolute", "bottom": "0", 'left':"0", "right":"0", "width": "100%", "height": "2.5rem","text-align":"center"}
-
+           
 footer_old = dbc.Row([
     dbc.Col(html.Div("WeWorld Onlus"), style={'text-align':'left'} ),
     dbc.Col(html.Div(["created by ", html.A("aripiz", href="https://github.com/aripiz", className='link-warning')]), style={'text-align':'right'})],   
@@ -67,13 +65,10 @@ page = dbc.Row(dbc.Col(page_container), style={ 'padding-top': '80px', 'padding-
 # Main layout
 app.layout = dbc.Container(
     [
-        #header,
         pages_nav,
         page,
         footer
     ],
     #fluid=True,
     className="dbc",     
-    #style={"padding": "1.5rem"}
-    #style = {"display": "flex","flex-direction": "column","height": "100vh"}
 )

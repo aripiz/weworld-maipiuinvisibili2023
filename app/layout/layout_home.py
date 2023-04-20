@@ -1,4 +1,4 @@
-# data_home.py
+# layout_home.py
 
 import plotly.express as px
 import plotly.io as pio

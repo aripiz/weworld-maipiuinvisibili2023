@@ -1,3 +1,5 @@
+# configuration.py
+
 # Title
 TITLE = 'Mai più invisibili 2023'
 

@@ -1,4 +1,4 @@
-# data_download.py
+# layout_download.py
 
 from index import df_data, df_meta
 from dash import dcc, html
@@ -56,5 +56,4 @@ modal_data_download = dbc.Modal(
     id="modal",
     centered=True,
     is_open=False,
-    #size='lg'
 )

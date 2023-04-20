@@ -1,4 +1,4 @@
-# tabs.py
+# layout_tabs.py
 
 from index import df_data, df_meta
 from dash import dcc, html

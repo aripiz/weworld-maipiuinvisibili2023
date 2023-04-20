@@ -12,7 +12,6 @@ layout = html.Div([
         html.Br(),
         dbc.Row([
             dbc.Col([
-                #dcc.Markdown("### Il diritto all'inclusione"),
                 dcc.Markdown(
                 "In un mondo in cui le diseguaglianze permangono e la povertà è ancora un problema globale, donne, bambini, bambine e adolescenti sono ovunque le categorie di persone più a rischio di esclusione sociale. Per questo, il primo obiettivo di WeWorld è la **promozione del diritto all’inclusione di donne, bambini e giovani in Italia e nel mondo.**"),
                 dcc.Markdown(
@@ -23,7 +22,7 @@ layout = html.Div([
                 dbc.ListGroup([
                     dbc.ListGroupItem(dcc.Markdown("**Valuta il progresso dei territori** alla luce delle condizioni di inclusione che riescono a garantire alle categorie più vulnerabili: donne, bambini e adolescenti.")),
                     dbc.ListGroupItem(dcc.Markdown("**Tiene conto delle condizioni di donne e minori in maniera congiunta**, interdipendente e simultanea, riconoscendo un nesso tra l’implementazione dei diritti di una categoria sul benessere dell’altra e viceversa.")), 
-                    dbc.ListGroupItem(dcc.Markdown("**Considera il concetto di inclusione al di là di un’accezione dello sviluppo puramente economicistica,** aprendo a una visione ampia, multidimensionale, dinamica e positiva, personale, sociale e intersezionale, universale."))# color='#B8DCCA') #(in linea con l’Agenda 2030 e le cosiddette 5P: People, Planet, Prosperity, Partnership, Peace)
+                    dbc.ListGroupItem(dcc.Markdown("**Considera il concetto di inclusione al di là di un’accezione dello sviluppo puramente economicistica,** aprendo a una visione ampia, multidimensionale, dinamica e positiva, personale, sociale e intersezionale, universale."))
                 ], flush=False)
             ], lg = 6, xs = 12),
             dbc.Col(dcc.Graph(figure=display_map_home(), responsive=True, style ={"height":"80vh"}), lg = 6, xs = 12, align='top')        
