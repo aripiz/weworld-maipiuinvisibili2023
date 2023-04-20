@@ -11,7 +11,7 @@ import os
 MAP_TOKEN = os.getenv("MAP_TOKEN")
 # MAP_TOKEN = "pk.eyJ1IjoiYXJpcGl6IiwiYSI6ImNsZjE5YzJrbjA2OWMzcHM0YzJyaXIydHAifQ.SWcexWOHS6ddnrGBx7idAw" # Only usable from weworld-maipiuinvisibili.onrender.com
 if MAP_TOKEN is not None: MAP_STYLE = "mapbox://styles/aripiz/clf1ay30l004n01lnzi17hjvj"
-else: "carto-positron"
+else: MAP_STYLE = "carto-positron"
 
 # Files link
 DATA_FILE = "https://raw.githubusercontent.com/aripiz/weworld-maipiuinvisibili2023/master/data/maipiuinvisibili2023_data.csv"
