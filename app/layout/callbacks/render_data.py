@@ -43,12 +43,12 @@ def display_map_index(feature, year):
                     #'Generale': ':.3g', 'Contesto':':.3g', 'Bambini':':.3g', 'Donne':':.3g'},
         zoom=ZOOM_LEVEL, opacity=1, center=dict(lat=42, lon=12)
     )
-    fig.update_layout(legend=dict(title_text="Livelli d'inclusione/esclusione",xanchor='right', yanchor='top', x=0.95, y=0.95))
+    fig.update_layout(legend=dict(title_text="Livelli d'inclusione/esclusione",xanchor='right', yanchor='top', x=0.95, y=0.92))
     #fig.update_layout(coloraxis_colorbar=dict(title="Punteggio", x=0.92))
     fig.update_layout(
         mapbox_style = MAP_STYLE,
         mapbox_accesstoken = MAP_TOKEN,
-        margin={"r":0,"t":30,"l":0,"b":0},
+        margin={"r":0,"t":0,"l":0,"b":0},
     )
     return fig
 
@@ -78,7 +78,7 @@ def display_map_indicators(indicator, year, kind):
             hover_data={'codice_istat':False, 'anno': False, col: ':.3g'},
             zoom=ZOOM_LEVEL, opacity=1, center=dict(lat=42, lon=12)
         )
-        fig.update_layout(coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità'], x=0.92))
+        fig.update_layout(coloraxis_colorbar=dict(title=df_meta.loc[int(indicator)]['unità'], x=0.92, len=0.75))
     elif kind=='Punteggi':
         col = f"{df_meta.loc[int(indicator)]['sottoindice']}|{df_meta.loc[int(indicator)]['dimensione']}|{indicator}"
         fig = px.choropleth_mapbox(df, geojson=GEO_FILE,
@@ -90,11 +90,11 @@ def display_map_indicators(indicator, year, kind):
             hover_data={'codice_istat':False, 'anno': False, col: ':.3g'},
             zoom=ZOOM_LEVEL, opacity=1, center=dict(lat=42, lon=12)
         )
-        fig.update_layout(coloraxis_colorbar=dict(title="Punteggio", x=0.92))
+        fig.update_layout(coloraxis_colorbar=dict(title="Punteggio", x=0.92,  len=0.75))
     fig.update_layout(
         mapbox_style = MAP_STYLE,
         mapbox_accesstoken = MAP_TOKEN,
-        margin={"r":0,"t":30,"l":0,"b":0},
+        margin={"r":0,"t":0,"l":0,"b":0},
     )
     return fig
 
