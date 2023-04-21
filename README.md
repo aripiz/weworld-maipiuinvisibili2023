@@ -4,4 +4,4 @@ Dashboard for "WeWorld Mai più invisibili", a composite statistical index asses
 
 The dashboard consists of a Dash web application written in Python. The styling of the website employs Bootstrap themes and components.
 
-You can access the final version at [this link](https://weworld-maipiuinvisibili.azurewebsites.net/).
+You can access the final version [here](https://weworld-maipiuinvisibili.azurewebsites.net/).
