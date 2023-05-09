@@ -18,3 +18,20 @@ app = Dash(
     suppress_callback_exceptions=True, 
     use_pages=True,
     )
+
+# Google Analytics 
+app.index_string = """<!DOCTYPE html>
+<html>
+    <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1348DFKDC1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-1348DFKDC1');
+    </script>
+    </head>
+</html>
+"""
